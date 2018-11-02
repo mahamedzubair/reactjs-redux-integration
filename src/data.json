@@ -1,0 +1,110 @@
+{
+	"cipId": "12345",
+	"name" : "John",
+	"claimsList": [{
+			"receiveddate": "10/01/2018",
+			"facilityprovider": "Jacksonville Va Specialty Clinic",
+			"servicetype": "Pharmacy",
+			"status": "Closed",
+			"showdetails": "Show Details"
+		},
+		{
+			"receiveddate": "10/09/2018",
+			"facilityprovider": "CVS",
+			"servicetype": "Health",
+			"status": "Open",
+			"showdetails": "Show Details"
+		},
+		{
+			"receiveddate": "09/01/2018",
+			"facilityprovider": "Life Care Center of Jacksonville",
+			"servicetype": "Pharmacy",
+			"status": "Open",
+			"showdetails": "Show Details"
+		},
+		{
+			"receiveddate": "09/27/2018",
+			"facilityprovider": "CVS #232",
+			"servicetype": "Health",
+			"status": "Open",
+			"showdetails": "Show Details"
+		},
+		{
+			"receiveddate": "08/25/2018",
+			"facilityprovider": "CVS #231",
+			"servicetype": "Pharmacy",
+			"status": "Closed",
+			"showdetails": "Show Details"
+		},
+		{
+			"receiveddate": "10/09/2018",
+			"facilityprovider": "CVS #232",
+			"servicetype": "Health",
+			"status": "Closed",
+			"showdetails": "Show Details"
+		},
+		{
+			"receiveddate": "10/09/2018",
+			"facilityprovider": "CVS #232",
+			"servicetype": "Pharmacy",
+			"status": "Open",
+			"showdetails": "Show Details"
+		},
+		{
+			"receiveddate": "10/09/2018",
+			"facilityprovider": "CVS #232",
+			"servicetype": "Health",
+			"status": "Open",
+			"showdetails": "Show Details"
+		},
+		{
+			"receiveddate": "10/09/2018",
+			"facilityprovider": "CVS #232",
+			"servicetype": "Pharmacy",
+			"status": "Open",
+			"showdetails": "Show Details"
+		},
+		{
+			"receiveddate": "10/09/2018",
+			"facilityprovider": "CVS #232",
+			"servicetype": "Health",
+			"status": "Open",
+			"showdetails": "Show Details"
+		},
+		{
+			"receiveddate": "10/09/2018",
+			"facilityprovider": "CVS #232",
+			"servicetype": "Pharmacy",
+			"status": "Open",
+			"showdetails": "Show Details"
+		},
+		{
+			"receiveddate": "10/09/2018",
+			"facilityprovider": "CVS #232",
+			"servicetype": "Health",
+			"status": "Open",
+			"showdetails": "Show Details"
+		},
+		{
+			"receiveddate": "10/09/2018",
+			"facilityprovider": "CVS #232",
+			"servicetype": "Pharmacy",
+			"status": "Open",
+			"showdetails": "Show Details"
+		},
+		{
+			"receiveddate": "10/09/2018",
+			"facilityprovider": "CVS #232",
+			"servicetype": "Health",
+			"status": "Open",
+			"showdetails": "Show Details"
+		},
+		{
+			"receiveddate": "10/09/2018",
+			"facilityprovider": "CVS #232",
+			"servicetype": "Pharmacy",
+			"status": "Open",
+			"showdetails": "Show Details"
+		}
+	]
+}
