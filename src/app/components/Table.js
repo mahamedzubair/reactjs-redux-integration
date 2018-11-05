@@ -15,7 +15,7 @@ class Table extends Component{
         direction: "sorting_asc",
         sortname: ""
       },
-      isFilterData: this.props.data,
+      isFilterData: [...this.props.data],
       isFilters: false,
       isLoaded: false
     };
@@ -33,7 +33,7 @@ class Table extends Component{
 
   //SORTING FUNCTIONALITY
   onSort = (event, sortKey, isSort) => {
-    const sortData = this.state.data;
+    const sortData = this.state.isFilterData;
     let tableSort = this.state.sort;
     if (isSort) {
       if (
@@ -56,7 +56,7 @@ class Table extends Component{
         sortData.sort((a, b) => a[sortKey].localeCompare(b[sortKey]));
       }
     }
-    this.setState({ data: sortData, sort: tableSort });
+    this.setState({ isFilterData: sortData, sort: tableSort });
   };
 
   onFilterChange = (val) => {
