@@ -48,7 +48,7 @@ class Authorization extends Component {
         <div className="small-12 large-12 medium-12 columns">
           <h1 id="authorization">Authorizations</h1>
             <Table
-              data={this.props.authData}
+              data={this.props.data.authData}
               headers={columns}
               defaultRowDisplay={10}
               id="authorization"
@@ -64,7 +64,7 @@ class Authorization extends Component {
 function mapStateToProps(state) {
   // `state` variable contains whole redux state.
   return {
-    authData: state.authData
+    data: state.authReducer
   };
 }
 
