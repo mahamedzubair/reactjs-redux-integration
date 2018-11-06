@@ -2,29 +2,15 @@ import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { translate } from "react-i18next";
 import Table from "../../../components/Table";
-import axios from "axios";
+import { fetchAuthorization } from '../actions';
+import { connect } from 'react-redux';
 
 @translate(["common"])
 class Authorization extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [],
-      filters:[],
-      columns: []
-    };
-  }
-
+  
   componentDidMount()  {
-    axios
-      .get("http://wks41b6049:3000/public/claims01.json")
-      .then(res => {
-        const data = res.data.claimsList;
-        this.setState({ data });
-      })
-      .catch(error => {
-        console.log("fetchRequestFailed", error);
-      });
+    // When container was mounted, we need to start fetching todos.
+    this.props.fetchAuthorization();
   }
 
   /// @@@@@@@@ RENDERS ....................
@@ -62,7 +48,7 @@ class Authorization extends Component {
         <div className="small-12 large-12 medium-12 columns">
           <h1 id="authorization">Authorizations</h1>
             <Table
-              data={this.state.data}
+              data={this.props.authData}
               headers={columns}
               defaultRowDisplay={10}
               id="authorization"
@@ -74,6 +60,25 @@ class Authorization extends Component {
     );
   }
 }
+// This function is used to convert redux global state to desired props.
+function mapStateToProps(state) {
+  // `state` variable contains whole redux state.
+  return {
+    authData: state.authData
+  };
+}
 
-export default Authorization;
+// This function is used to provide callbacks to container component.
+function mapDispatchToProps(dispatch) {
+  return {
+    // This function will be available in component as `this.props.fetchTodos`
+    fetchAuthorization: function() {
+      dispatch(fetchAuthorization());
+    }
+  };
+}
+
+// We are using `connect` function to wrap our component with special component, which will provide to container all needed data.
+export default connect(mapStateToProps, mapDispatchToProps)(Authorization);
+
 

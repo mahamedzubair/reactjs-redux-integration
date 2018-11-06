@@ -3,8 +3,8 @@ import {connect} from "react-redux";
 
 import { User } from "../components/User";
 import { Main } from "../components/Main";
-import  Claims  from "../components/Claims";
-import Authorization from "../components/authorization"
+import  Claims  from "../components/claims/container/Claims";
+import Authorization from "../components/authorization/container/authorization";
 
 class App extends React.Component {
     render() {
