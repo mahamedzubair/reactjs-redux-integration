@@ -14,9 +14,17 @@ const authReducer = (state = INITIAL_STATE, action) => {
       });
     case 'FETCH_AUTHORIZATION_SUCCESS':
       // Adding derived authData to state
+      let data = [...action.authData];
+      data = data.map((list, index) =>  {
+          list['claimAppealed'] =  false;        
+          if(index === 2 || index === 3) {
+              list['claimAppealed'] =  true; 
+          }
+          return list;
+      });
       return Object.assign({}, state, {
         isFetching: false,
-        authData: action.authData
+        authData: data
       });
     case 'FETCH_AUTHORIZATION_FAILURE':
       // Providing error message to state, to be able display it in UI.

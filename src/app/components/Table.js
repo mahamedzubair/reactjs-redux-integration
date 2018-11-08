@@ -76,9 +76,9 @@ class Table extends Component{
         }
       }
     }
-    this.setState({isFilterData: filteredData })
+    this.setState({isFilterData: filteredData, isLoaded: true })
   } else{
-    this.setState({isFilterData: this.state.data})
+    this.setState({isFilterData: this.state.data, isLoaded: true})
   }
 }
   
@@ -86,7 +86,7 @@ class Table extends Component{
 
   render() {
     const loadSize = this.state.isLoaded
-      ? this.state.data.length
+      ? this.state.isFilterData.length
       : this.props.defaultRowDisplay;
       
     return (
@@ -107,7 +107,7 @@ class Table extends Component{
           </div>
             <div className="table.search" />
             <div className="table.records text-right">
-            Displaying {loadSize}/{this.state.data.length} Claims
+            Displaying {loadSize}/{this.state.isFilterData.length} Claims
           </div>
           </div>
         <table
@@ -156,10 +156,13 @@ class Table extends Component{
           <tbody>
             {this.state.isFilterData &&
               this.state.isFilterData.slice(0, loadSize).map((rowData, index) => (
-                <tr key={index} data-item={rowData}>
+                <tr key={index} data-item={rowData}
+                  className={rowData.claimAppealed ? 'claim-active' : ''}>
                   {Object.keys(rowData).map((key, index) => (
                     <td key={index} data-title={rowData[key]}>
-                      {rowData[key]}
+                      {key !== 'claimAppealed' ? rowData[key] : ''}
+                      <br/>
+                      {key === 'status' && rowData.claimAppealed ? 'Claim Applealed' : '' }
                     </td>
                   ))}
                 </tr>
