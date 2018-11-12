@@ -18,13 +18,13 @@ class Authorization extends Component {
   render() {
     const columns = [
           {
-            name: "Received Date",
-            key: "receiveddate",
+            name: "Facility/Provider",
+            key: "facilityprovider",
             sort:true
           },
           {
-            name: "Facility/Provider",
-            key: "facilityprovider",
+            name: "Received Date",
+            key: "receiveddate",
             sort:true
           },
           {
@@ -53,7 +53,7 @@ class Authorization extends Component {
               defaultRowDisplay={10}
               id="authorization"
               sortable={true}
-              filterLimitedIndex="3"
+              providerRowDisplay='facilityprovider'
               />
         </div>
       </div>

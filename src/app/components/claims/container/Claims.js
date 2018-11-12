@@ -153,13 +153,13 @@ class Claims extends Component {
   render() {
     const columns =[
         {
-          name: "Service",
-          key: "servicedate",
+          name: "Facility/Provider",
+          key: "facilityprovider",
           sort: true,
         },
         {
-          name: "Facility/Provider",
-          key: "facilityprovider",
+          name: "Service",
+          key: "servicedate",
           sort: true,
         },
         {
@@ -199,7 +199,7 @@ class Claims extends Component {
               id="claims"
               sortable={true}
               filterLimitedIndex="3"
-
+              providerRowDisplay='facilityprovider'
               />
         </div>
       </div>
