@@ -112,7 +112,7 @@ class Table extends Component{
           </div>
         <table
           aria-labelledby={this.props.id}
-          className="dataTable"
+          className="dataTable responsiveTable"
         >
           <thead>
             <tr>
@@ -158,11 +158,14 @@ class Table extends Component{
               this.state.isFilterData.slice(0, loadSize).map((rowData, index) => (
                 <tr key={index} data-item={rowData}
                   className={rowData.claimAppealed ? 'claim-active' : ''}>
-                  {Object.keys(rowData).map((key, index) => (
-                    <td key={index} data-title={rowData[key]}>
-                      {key !== 'claimAppealed' ? rowData[key] : ''}
+                  {this.state.headers.map((obj, dataIndex) => (
+                    <td key={dataIndex} data-title={rowData[obj.key]} className='pivoted'>
+                      <div className="tdBefore">
+                        {obj.name}
+                      </div>
+                      {obj.key !== 'claimAppealed' ? rowData[obj.key] : ''}
                       <br/>
-                      {key === 'status' && rowData.claimAppealed ? 'Claim Applealed' : '' }
+                      {obj.key === 'status' && rowData.claimAppealed ? 'Claim Applealed' : '' }
                     </td>
                   ))}
                 </tr>
