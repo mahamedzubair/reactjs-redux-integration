@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router";
+import { withRouter, Link } from "react-router";
 import { translate } from "react-i18next";
-import Table from "../../../components/Table";
+import Table from "components/Table";
+import * as links from 'constants/routes';
 
 @translate(["common"])
 class Claims extends Component {
@@ -10,6 +11,7 @@ class Claims extends Component {
     this.state = {
       data: [
         {
+          claimID: 1,
           servicedate: "10/02/2018",
           facilityprovider: "Jacksonville Va Specialty Clinic",
           servicetype: "Health",
@@ -19,6 +21,7 @@ class Claims extends Component {
           showdetails: "Show Details"
         },
         {
+          claimID: 2,
           servicedate: "10/01/2018",
           facilityprovider: "CVS",
           servicetype: "Pharmacy",
@@ -28,6 +31,7 @@ class Claims extends Component {
           showdetails: "Show Details"
         },
         {
+          claimID: 3,
           servicedate: "09/27/2018",
           facilityprovider: "Life Care Center of Jacksonville",
           servicetype: "Dental",
@@ -37,6 +41,7 @@ class Claims extends Component {
           showdetails: "Show Details"
         },
         {
+          claimID: 4,
           servicedate: "06/27/2018",
           facilityprovider: "CVS #232",
           servicetype: "Health",
@@ -46,6 +51,7 @@ class Claims extends Component {
           showdetails: "Show Details"
         },
         {
+          claimID: 5,
           servicedate: "07/27/2018",
           facilityprovider: "CVS #231",
           servicetype: "Dental",
@@ -55,6 +61,7 @@ class Claims extends Component {
           showdetails: "Show Details"
         },
         {
+          claimID: 6,
           servicedate: "09/27/2018",
           facilityprovider: "CVS #232",
           servicetype: "Health",
@@ -64,6 +71,7 @@ class Claims extends Component {
           showdetails: "Show Details"
         },
         {
+          claimID: 7,
           servicedate: "10/01/2018",
           facilityprovider: "CVS #232",
           servicetype: "Pharmacy",
@@ -73,6 +81,7 @@ class Claims extends Component {
           showdetails: "Show Details"
         },
         {
+          claimID: 8,
           servicedate: "06/27/2018",
           facilityprovider: "CVS #232",
           servicetype: "Dental",
@@ -82,6 +91,7 @@ class Claims extends Component {
           showdetails: "Show Details"
         },
         {
+          claimID: 9,
           servicedate: "10/02/2018",
           facilityprovider: "CVS #232",
           servicetype: "Health",
@@ -91,6 +101,7 @@ class Claims extends Component {
           showdetails: "Show Details"
         },
         {
+          claimID: 10,
           servicedate: "10/01/2018",
           facilityprovider: "CVS #232",
           servicetype: "Dental",
@@ -100,6 +111,7 @@ class Claims extends Component {
           showdetails: "Show Details"
         },
         {
+          claimID: 11,
           servicedate: "07/27/2018",
           facilityprovider: "CVS #232",
           servicetype: "Pharmacy",
@@ -109,6 +121,7 @@ class Claims extends Component {
           showdetails: "Show Details"
         },
         {
+          claimID: 12,
           servicedate: "07/27/2018",
           facilityprovider: "CVS #232",
           servicetype: "Health",
@@ -118,6 +131,7 @@ class Claims extends Component {
           showdetails: "Show Details"
         },
         {
+          claimID: 13,
           servicedate: "09/27/2018",
           facilityprovider: "CVS #232",
           servicetype: "Pharmacy",
@@ -127,6 +141,7 @@ class Claims extends Component {
           showdetails: "Show Details"
         },
         {
+          claimID: 14,
           servicedate: "09/27/2018",
           facilityprovider: "CVS #232",
           servicetype: "Dental",
@@ -136,6 +151,7 @@ class Claims extends Component {
           showdetails: "Show Details"
         },
         {
+          claimID: 15,
           servicedate: "09/27/2018",
           facilityprovider: "CVS #232",
           servicetype: "Health",
@@ -155,51 +171,52 @@ class Claims extends Component {
         {
           name: "Facility/Provider",
           key: "facilityprovider",
-          sort: true,
+          sort: true
         },
         {
           name: "Service",
           key: "servicedate",
-          sort: true,
+          sort: true
         },
         {
           name: "Service Type",
           key: "servicetype",
-          sort: true,
+          sort: true
         },
         {
           name: "Status",
           key: "status",
-          sort: true,
+          sort: true
         },
         {
           name: "Claim Charge",
           key: "claimcharge",
-          sort: false,
+          sort: false
         },
         {
           name: "Your Cost",
           key: "yourcost",
-          sort: false,
+          sort: false
         },
         {
           name: "Show Details",
           key: "showdetails",
-          sort: false,
+          sort: false
         }
     ]
     return (
       <div className="row">
         <div className="small-12 large-12 medium-12 columns">
           <h1>Claims</h1>
-            <Table 
-              data={this.state.data}
-              headers={columns}
-              defaultRowDisplay={10}
-              id="claims"
-              sortable={true}
-              filterLimitedIndex="3"
-              providerRowDisplay='facilityprovider'
+              <Table 
+                data={this.state.data}
+                headers={columns}
+                defaultRowDisplay={10}
+                name="claims"
+                sortable={true}
+                pageLink = {links.CLAIMSOVERVIEW}
+                providerRowDisplay='facilityprovider'
+                uniqueKey="claimID"
               />
         </div>
       </div>

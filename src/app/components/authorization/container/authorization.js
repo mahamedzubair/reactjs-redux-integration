@@ -1,16 +1,17 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { translate } from "react-i18next";
-import Table from "../../../components/Table";
+import Table from "components/Table";
 import { fetchAuthorization } from '../actions';
 import { connect } from 'react-redux';
+import * as links from 'constants/routes';
+import * as Actions from '../actions';
 
 @translate(["common"])
 class Authorization extends Component {
-  
-  componentDidMount()  {
-    // When container was mounted, we need to start fetching todos.
-    this.props.fetchAuthorization();
+
+  componentDidMount() {
+    this.props.dispatch(Actions.fetchAuthorization());
   }
 
   /// @@@@@@@@ RENDERS ....................
@@ -18,13 +19,13 @@ class Authorization extends Component {
   render() {
     const columns = [
           {
-            name: "Facility/Provider",
-            key: "facilityprovider",
+            name: "Received Date",
+            key: "receiveddate",
             sort:true
           },
           {
-            name: "Received Date",
-            key: "receiveddate",
+            name: "Facility/Provider",
+            key: "facilityprovider",
             sort:true
           },
           {
@@ -42,7 +43,7 @@ class Authorization extends Component {
             key: "showdetails",
             sort:false
           }
-    ];
+    ]; 
     return (
       <div className="row">
         <div className="small-12 large-12 medium-12 columns">
@@ -53,6 +54,7 @@ class Authorization extends Component {
               defaultRowDisplay={10}
               id="authorization"
               sortable={true}
+              pageLink = {links.CLAIMSOVERVIEW}
               providerRowDisplay='facilityprovider'
               />
         </div>
@@ -60,25 +62,12 @@ class Authorization extends Component {
     );
   }
 }
-// This function is used to convert redux global state to desired props.
+
 function mapStateToProps(state) {
-  // `state` variable contains whole redux state.
   return {
     data: state.authReducer
   };
 }
 
-// This function is used to provide callbacks to container component.
-function mapDispatchToProps(dispatch) {
-  return {
-    // This function will be available in component as `this.props.fetchTodos`
-    fetchAuthorization: function() {
-      dispatch(fetchAuthorization());
-    }
-  };
-}
-
-// We are using `connect` function to wrap our component with special component, which will provide to container all needed data.
-export default connect(mapStateToProps, mapDispatchToProps)(Authorization);
-
+export default connect(mapStateToProps)(Authorization);
 
