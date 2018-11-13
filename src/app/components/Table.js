@@ -102,6 +102,9 @@ class Table extends Component {
     return (
       <div className="columns large-12 medium-12">
         <div>
+          <Link className="button naked back-btn" to={links.HEALTHINSURANCE}>
+            <span aria-hidden="true" class="icon-chevron-left" />Back
+          </Link>
           <button
             className="button naked filter-btn"
             onMouseDown={this.toggleFilters}
@@ -176,13 +179,19 @@ class Table extends Component {
                         .slice(0, loadSize)
                         .map((rowData, index) => (
                           <tr key={index} data-item={rowData}>
-                            {this.state.headers.map((obj, dataIndex) => (
+                            {this.state.headers.map((obj, dataIndex, arr) => (
                               <td
                                 key={dataIndex}
                                 data-title={rowData[obj.key]}
                               >
                                 {obj.key !== "claimAppealed"
-                                  ? rowData[obj.key]
+                                  ? arr.length - 1 === dataIndex ? (
+                                      <Link to={this.props.pageLink}>
+                                        {rowData[obj.key]}
+                                      </Link>
+                                    ) : (
+                                      rowData[obj.key]
+                                    )
                                   : ""}
                                 <br />
                                 {obj.key === "status" && rowData.claimAppealed
