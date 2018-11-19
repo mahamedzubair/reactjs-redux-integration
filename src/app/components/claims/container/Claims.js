@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router";
 import { translate } from "react-i18next";
-import Table from "components/Table";
-import * as links from 'constants/routes';
+import Table from "../../../components/Table";
+import * as links from '../../../constants/routes';
 
-@translate(["common"])
+//@translate(["common"])
 class Claims extends Component {
   constructor(props) {
     super(props);
@@ -204,6 +204,7 @@ class Claims extends Component {
           sort: false
         }
     ]
+    const ariaLabelKey = ['facilityprovider', 'receiveddate']; 
     return (
       <div className="row">
         <div className="small-12 large-12 medium-12 columns">
@@ -217,6 +218,9 @@ class Claims extends Component {
                 pageLink = {links.CLAIMSOVERVIEW}
                 providerRowDisplay='facilityprovider'
                 uniqueKey="claimID"
+                linkAriaLabelKey={ariaLabelKey}
+                filterAriaControl="sidenav claims"
+                viewMoreAriaLabel="View more about Claims"
               />
         </div>
       </div>

@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { translate } from "react-i18next";
-import Table from "components/Table";
+import Table from "../../../components/Table";
 import { fetchAuthorization } from '../actions';
 import { connect } from 'react-redux';
-import * as links from 'constants/routes';
+import * as links from '../../../constants/routes';
 import * as Actions from '../actions';
 
-@translate(["common"])
+//@translate(["common"])
 class Authorization extends Component {
 
   componentDidMount() {
@@ -43,7 +43,8 @@ class Authorization extends Component {
             key: "showdetails",
             sort:false
           }
-    ]; 
+    ];
+    const ariaLabelKey = ['facilityprovider', 'receiveddate']; 
     return (
       <div className="row">
         <div className="small-12 large-12 medium-12 columns">
@@ -52,10 +53,13 @@ class Authorization extends Component {
               data={this.props.data.authData}
               headers={columns}
               defaultRowDisplay={10}
-              id="authorization"
+              name="authorization"
               sortable={true}
               pageLink = {links.CLAIMSOVERVIEW}
               providerRowDisplay='facilityprovider'
+              linkAriaLabelKey={ariaLabelKey}
+              filterAriaControl="sidenav authorization"
+              viewMoreAriaLabel="View more about Claims"
               />
         </div>
       </div>

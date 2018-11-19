@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
 import { translate } from "react-i18next";
-import Filters from "components/Filters";
+import Filters from "../routes/filter/containers/Filter";
 import { Link } from "react-router-dom";
-import * as links from "constants/routes";
+import * as links from "../constants/routes";
 import MediaQuery from "react-responsive";
 import "../scss/custom.scss";
 
-@translate(["common"])
+//@translate(["common"])
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -108,6 +108,8 @@ class Table extends Component {
           <button
             className="button naked filter-btn"
             onMouseDown={this.toggleFilters}
+            aria-controls={this.props.filterAriaControl}
+            aria-expanded={this.state.isFilters}
             onClick={() => {
               this.setState({ isFilters: !this.state.isFilters });
             }}
@@ -115,6 +117,9 @@ class Table extends Component {
             <span className="icon-filter" />
             Filters
           </button>
+          <div className="table.records text-right" aria-describedby={this.props.name}>
+            Displaying {loadSize}/{this.state.isFilterData.length} Claims
+          </div>
           <div className="clearfix"></div>
           {this.state.isFilters && (
             <Filters
@@ -186,7 +191,10 @@ class Table extends Component {
                               >
                                 {obj.key !== "claimAppealed"
                                   ? arr.length - 1 === dataIndex ? (
-                                      <Link to={this.props.pageLink}>
+                                      <Link to={this.props.pageLink} 
+                                        aria-label={this.props.linkAriaLabelKey.reduce((accumulator, currentValue, currentIndex, array) => {
+                                                        return `${accumulator} ${rowData[currentValue]}`;
+                                                    }, '')}>
                                         {rowData[obj.key]}
                                       </Link>
                                     ) : (
@@ -245,6 +253,7 @@ class Table extends Component {
                 type="button"
                 className="button secondary"
                 onClick={() => this.setState({ isLoaded: true })}
+                aria-label={this.props.viewMoreAriaLabel}
               >
                 View More Cliams
               </button>
