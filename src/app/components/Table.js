@@ -5,6 +5,7 @@ import Filters from "../routes/filter/containers/Filter";
 import { Link } from "react-router-dom";
 import * as links from "../constants/routes";
 import MediaQuery from "react-responsive";
+import Tooltip from 'rc-tooltip';
 import "../scss/custom.scss";
 
 //@translate(["common"])
@@ -22,7 +23,8 @@ class Table extends Component {
       isFilterData: [...this.props.data],
       isFilters: false,
       isLoaded: false,
-      visible: false
+      visible: false,
+      hoveredTooltipIndex: -1
     };
   }
 
@@ -41,6 +43,44 @@ class Table extends Component {
       visible: !this.state.visible
     });
   };
+
+  getCell = (col) => {
+    return (
+      <div>{col.obj.key !== "claimAppealed"
+          ? col.arr.length - 1 === col.dataIndex ? (
+              <Link to={this.props.pageLink} 
+                aria-label={this.props.linkAriaLabelKey.reduce((accumulator, currentValue, currentIndex, array) => {
+                                return `${accumulator} ${col.rowData[currentValue]}`;
+                            }, col.obj.name)}>
+                {col.rowData[col.obj.key]}
+              </Link>
+            ) : (
+              col.rowData[col.obj.key]
+            )
+          : ""}
+        <br />
+        {col.obj.key === "status" && col.rowData.claimAppealed
+          ? <span className="desktop-view">Claim Applealed</span>
+          : ""}
+      </div>
+    )
+  }
+
+  getColTooltip = (col) => {
+    if(col.obj.key ===  this.props.toolTipCol) {
+       return(<Tooltip
+            placement="right"
+            key={`${col.index}-${col.dataIndex}`}
+            overlay={<div style={{ height: 50, width: 50 }}>{col.rowData[col.obj.key]}</div>}
+            align={{
+            offset: [4, 10],
+          }}
+          >
+          {this.getCell(col)}
+       </Tooltip>)
+    }
+    return this.getCell(col)
+  }
 
   //SORTING FUNCTIONALITY
   onSort = (event, sortKey, isSort) => {
@@ -103,7 +143,7 @@ class Table extends Component {
       <div className="columns large-12 medium-12">
         <div>
           <Link className="button naked back-btn" to={links.HEALTHINSURANCE}>
-            <span aria-hidden="true" class="icon-chevron-left" />Back
+            <span aria-hidden="true" className="icon-chevron-left" />Back
           </Link>
           <button
             className="button naked filter-btn"
@@ -129,6 +169,7 @@ class Table extends Component {
               filteredDataHeaders={this.state.headers}
               toggleFilters={this.toggleFilters}
               filterVisibility={this.state.visible}
+              filterAriaControl={this.props.filterAriaControl}
             />
           )}
         </div>
@@ -185,27 +226,12 @@ class Table extends Component {
                         .map((rowData, index) => (
                           <tr key={index} data-item={rowData}>
                             {this.state.headers.map((obj, dataIndex, arr) => (
-                              <td
-                                key={dataIndex}
-                                data-title={rowData[obj.key]}
-                              >
-                                {obj.key !== "claimAppealed"
-                                  ? arr.length - 1 === dataIndex ? (
-                                      <Link to={this.props.pageLink} 
-                                        aria-label={this.props.linkAriaLabelKey.reduce((accumulator, currentValue, currentIndex, array) => {
-                                                        return `${accumulator} ${rowData[currentValue]}`;
-                                                    }, '')}>
-                                        {rowData[obj.key]}
-                                      </Link>
-                                    ) : (
-                                      rowData[obj.key]
-                                    )
-                                  : ""}
-                                <br />
-                                {obj.key === "status" && rowData.claimAppealed
-                                  ? <span className="desktop-view">Claim Applealed</span>
-                                  : ""}
-                              </td>
+                                <td
+                                  key={dataIndex}
+                                  data-title={rowData[obj.key]}>
+                                  {this.getColTooltip({obj, rowData, dataIndex, arr, index})}
+                                </td>
+                              
                             ))}
                           </tr>
                         ))}

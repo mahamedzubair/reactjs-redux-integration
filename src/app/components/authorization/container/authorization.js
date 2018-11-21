@@ -60,6 +60,7 @@ class Authorization extends Component {
               linkAriaLabelKey={ariaLabelKey}
               filterAriaControl="sidenav authorization"
               viewMoreAriaLabel="View more about Claims"
+              toolTipCol="facilityprovider"
               />
         </div>
       </div>

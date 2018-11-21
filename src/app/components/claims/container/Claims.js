@@ -221,6 +221,7 @@ class Claims extends Component {
                 linkAriaLabelKey={ariaLabelKey}
                 filterAriaControl="sidenav claims"
                 viewMoreAriaLabel="View more about Claims"
+                toolTipCol="facilityprovider"
               />
         </div>
       </div>
