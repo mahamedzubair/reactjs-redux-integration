@@ -7,7 +7,7 @@ export function fetchAuthorization() {
       type: 'FETCH_AUTHORIZATION_REQUEST'
     });
     return axios
-      .get("http://localhost:8080/data.json")
+      .get("http://localhost:3000/data.json")
       .then(res => {
           // When everything is ok, dispatching SUCCESS action.
           console.log('res', res)
@@ -23,6 +23,16 @@ export function fetchAuthorization() {
           });
         console.log("fetchRequestFailed", error);
       });
+  }
+}
+
+export function filterAuthorization(filteredData) {
+  console.log('filteredData action', filteredData)
+  return {
+      type: "FILTER_AUTH_DATA",
+      payload: {
+          filteredData
+      }
   }
 }
 
