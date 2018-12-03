@@ -9,69 +9,58 @@ class Filters extends Component {
     super(props);
     this.state = {
       filterData: this.props.filteredData,
-      filters: [],
+      filters: {},
       newfilter: [],
       headers: this.props.filteredDataHeaders,
       isFilters: false,
       filteredData: [... this.props.filteredData]
     };
   }
-
-  changeFilter(e, key, value) {
-    const filtersToSet = [],
-      filterToSet = this.state.filters,
-      filterSet = new Set(filtersToSet[key]);
-    if (e.target.checked) {
-      filterSet.add(value);
-    } else {
-      filterSet.delete(value);
-    }
-    filtersToSet[key] = filterSet;
-
-
-    let arrayOfSkills = Array.from(filterSet);
-    let temp = {
-      'key': key, 'values': arrayOfSkills
-    }
-
-    for (var i = 0; i < filterToSet.length; i++) {
-      if (filterToSet[i]['key'] === key) {
-        filterToSet.splice(filterToSet.findIndex(function (i) {
-          return i.key === key;
-        }), 1);
+  
+  filterListInit = (type = 'init') => {
+    let filters = {... this.state.filters};
+    this.props.filteredDataHeaders.forEach((element) => {
+      if(!filters[element.key] || type === 'clear') {
+        filters[element.key] = [];
       }
-    }
+    });
+    return filters;
+  }
 
-    filterToSet.push(temp);
-    if (filterToSet[0].values.length === 0) {
-      filterToSet.length = 0;
+  clearSelection = () => {
+    this.setState({ filters: this.filterListInit('clear') });
+  }
+
+  changeFilter = (e, key, value) =>  {
+    let filters = this.state.filters;
+    if (!filters[key]) {
+      filters[key] = [];
     }
-    
-    this.setState({ filters: filterToSet });
+    if (filters[key].indexOf(value) === -1 && e.target.checked) {
+      filters[key].push(value)
+    }
+    if (filters[key].indexOf(value) > -1 && !e.target.checked) {
+      filters[key].splice(filters[key].indexOf(value), 1)
+    }
+    if(!filters[key].length) {
+      delete filters[key];
+    }
+    this.setState({ filters: filters });
 
   };
 
   onFilterChange = () => {
-    let filteredData = [];
-    if (this.state.filters.length) {
-      for (let i = 0; i < this.props.filteredData.length; i++) {
-        for (let j = 0; j < this.state.filters.length; j++) {
-          for (let k = 0; k < this.state.filters[j].values.length; k++) {
-            let uniqueId = filteredData.map((item, index) => {
-              return item[this.props.uniqueKey];
-            });
-            if (this.props.filteredData[i][this.state.filters[j].key] === this.state.filters[j].values[k] && uniqueId.indexOf(this.props.filteredData[i][this.props.uniqueKey]) === -1) {
-              
-              filteredData.push(this.props.filteredData[i]);
-            }
-          }
-        }
-      }
+    let filteredData = [... this.props.filteredData];
+    if (this.state.filters) {
+      filteredData = filteredData.filter((list) => {
+        return Object.keys(this.state.filters).every((key) => {
+          return this.state.filters[key].some((value) => {
+            return list[key] === value;
+          });
+        });
+      });
       this.setState({ filteredData: filteredData, isFilters: !this.state.isFilters });
       this.props.filterChange(filteredData);
-    } else {
-      this.setState({ filteredData: this.props.filterData, isFilters: !this.state.isFilters });
-      this.props.filterChange(this.props.filterData);
     }
   };
 
@@ -80,6 +69,7 @@ class Filters extends Component {
   };
 
   render() {
+    let filters = this.filterListInit();
     const { t } = this.props;
     const filterData = [];
     let filterLimitedIndex = this.props.filterLimitedIndex && this.props.filteredDataHeaders.length >= this.props.filterLimitedIndex ? this.props.filterLimitedIndex : this.props.filteredDataHeaders.length;
@@ -95,28 +85,33 @@ class Filters extends Component {
         </button>
         {this.state.isFilters &&
           <div id="sidenav">
-            <div id="closebtn" onClick={this.toggleFilters}>
-              <span className="hl-medium">Clear Section</span>
-              <span aria-hidden="true" aria-expanded={this.state.isFilters} className="icon icon-remove"></span>
+            <div id="closebtn">
+              <span className="hl-medium" onClick={this.clearSelection}>Clear Section</span>
+              <span aria-hidden="true" aria-expanded={this.state.isFilters} 
+                onClick={this.toggleFilters}
+                className="icon icon-remove"></span>
             </div>
-            {filterData.map((value, i) => (
-              <div key={i}>
-                <h1 className="hl-medium scrollable">{value.label}</h1>
-                <ul>{value.data.map((x, ikey) =>
-                  <li key={ikey}>
-                    <label>
-                      <input
-                        type="checkbox"
-                        name={x}
-                        onChange={e => this.changeFilter(e, value.id, x)}
-                        />{" "}
-                      {x}
-                    </label>
-                  </li>
-                )}
-                </ul>
-              </div>
-            ))}
+            <div className="sidenav-content">
+              {filterData.map((value, i) => (
+                <div key={i}>
+                  <h1 className="hl-medium scrollable">{value.label}</h1>
+                  <ul>{value.data.map((x, ikey) =>
+                    <li key={ikey}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          name={x}
+                          onChange={e => this.changeFilter(e, value.id, x)}
+                          checked={filters[value.id].indexOf(x) > -1}
+                          />{" "}
+                        {x}
+                      </label>
+                    </li>
+                  )}
+                  </ul>
+                </div>
+              ))}
+            </div>
             <button onClick={() => this.onFilterChange()}>
               Apply Filters
               </button>

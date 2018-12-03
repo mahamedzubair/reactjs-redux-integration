@@ -132,10 +132,9 @@
   }
   #closebtn {
     position: absolute;
-    top: 100;
+    top: 10px;
     right: 25px;
     font-size: 15px;
-    margin-left: 50px;
   }
   li {
     padding: 8px 8px 8px 8px;
@@ -147,6 +146,9 @@
 }
 .filter-btn {
   float: left;
+}
+.back-btn { 
+  display: none;
 }
 .clearfix {
   clear: both;
@@ -254,8 +256,20 @@ table.overview {
   .desktop-view {
     display: none;
   }
+  .back-btn {
+    display: block;
+    float: left;
+  }
   .filter-btn {
     float: right;
   }
 }
 
+body {
+  margin-left: 150px;
+}
+
+.sidenav-content {
+  height: 80%;
+  overflow-x: auto
+}

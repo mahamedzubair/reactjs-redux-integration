@@ -48,12 +48,6 @@ class Authorization extends Component {
         name: "Status",
         key: "status",
         sort: true
-      },
-      {
-        label: "Show Details", //t('authorization:table.showdetails'),
-        name: "Show Details",
-        key: "showdetails",
-        sort: false
       }
     ];
     console.log('this.props', this.props)
@@ -88,6 +82,7 @@ class Authorization extends Component {
             pageLink={links.CLAIMSOVERVIEW}
             providerRowDisplay='facilityprovider'
             uniqueKey="id"
+            showDetails={true}
             />
         </div>
       </div>

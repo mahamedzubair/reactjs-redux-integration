@@ -117,6 +117,11 @@ class UITable extends Component {
                   </th>
                 );
               })}
+              {this.props.showDetails &&
+                <th>
+                  Actions
+                </th>
+              }
             </tr>
           </thead>
           <MediaQuery minDeviceWidth={640}>
@@ -137,21 +142,20 @@ class UITable extends Component {
                                 key={dataIndex}
                                 data-title={rowData[obj.key]}
                                 >
-                                {obj.key !== "claimAppealed"
-                                  ? arr.length - 1 === dataIndex ? (
-                                    <Link to={this.props.pageLink}>
-                                      {rowData[obj.key]}
-                                    </Link>
-                                  ) : (
-                                      rowData[obj.key]
-                                    )
-                                  : ""}
+                                { rowData[obj.key]}
                                 <br />
                                 {obj.key === "status" && rowData.claimAppealed
                                   ? <span className="desktop-view">Claim Applealed </span>
                                   : ""}
                               </td>
                             ))}
+                            {this.props.showDetails &&
+                              <td>
+                                <Link to={this.props.pageLink}>
+                                  Show Details
+                                </Link>
+                              </td>
+                            }
                           </tr>
                         ))}
                   </tbody>
@@ -187,7 +191,6 @@ class UITable extends Component {
                                   </Link>
                                 </td>
                               ))}
-
                           </tr>
                         ))}
                   </tbody>
