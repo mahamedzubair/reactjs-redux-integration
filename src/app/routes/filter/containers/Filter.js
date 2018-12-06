@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
 import { translate } from "react-i18next";
 import '../../../scss/custom.scss';
+import UICheckSelection from '../../../components/UI/UICheckSelection';
 
 //@translate(["common"])
 class Filters extends Component {
@@ -16,11 +17,11 @@ class Filters extends Component {
       filteredData: [... this.props.filteredData]
     };
   }
-  
+
   filterListInit = (type = 'init') => {
-    let filters = {... this.state.filters};
+    let filters = { ... this.state.filters };
     this.props.filteredDataHeaders.forEach((element) => {
-      if(!filters[element.key] || type === 'clear') {
+      if (!filters[element.key] || type === 'clear') {
         filters[element.key] = [];
       }
     });
@@ -28,34 +29,35 @@ class Filters extends Component {
   }
 
   clearSelection = () => {
-    this.setState({ filters: this.filterListInit('clear') });
+    this.setState({ filters: this.filterListInit('clear') }, () => {
+      this.onFilterChange();
+    });
+
   }
 
-  changeFilter = (e, key, value) =>  {
+  changeFilter = (key, value, list) => {
     let filters = this.state.filters;
-    if (!filters[key]) {
-      filters[key] = [];
+    if (!filters[list]) {
+      filters[list] = [];
     }
-    if (filters[key].indexOf(value) === -1 && e.target.checked) {
-      filters[key].push(value)
-    }
-    if (filters[key].indexOf(value) > -1 && !e.target.checked) {
-      filters[key].splice(filters[key].indexOf(value), 1)
-    }
-    if(!filters[key].length) {
-      delete filters[key];
+    if (filters[list].indexOf(value) === -1) {
+      filters[list].push(value[0])
     }
     this.setState({ filters: filters });
-
   };
-
   onFilterChange = () => {
+    let filters = { ... this.state.filters }
+    for (let key in filters) {
+      if (!filters[key].length) {
+        delete filters[key];
+      }
+    }
     let filteredData = [... this.props.filteredData];
     if (this.state.filters) {
       filteredData = filteredData.filter((list) => {
-        return Object.keys(this.state.filters).every((key) => {
-          return this.state.filters[key].some((value) => {
-            return list[key] === value;
+        return Object.keys(filters).every((key) => {
+          return filters[key].some((value) => {
+            return !list[key].length || list[key] === value;
           });
         });
       });
@@ -70,12 +72,25 @@ class Filters extends Component {
 
   render() {
     let filters = this.filterListInit();
+    let selectionFilter = [];
+    for (let key in filters) {
+      selectionFilter = new Set([...selectionFilter, ...filters[key]])
+    }
     const { t } = this.props;
-    const filterData = [];
+    let filterData = [];
     let filterLimitedIndex = this.props.filterLimitedIndex && this.props.filteredDataHeaders.length >= this.props.filterLimitedIndex ? this.props.filterLimitedIndex : this.props.filteredDataHeaders.length;
     for (let i = 0; i < filterLimitedIndex; i++) {
-      filterData.push({ 'label': `${this.props.filteredDataHeaders[i].label}`, 'id': `${this.props.filteredDataHeaders[i].key}`, 'data': [...new Set(this.props.filteredData.map(item => item[this.props.filteredDataHeaders[i].key]))] })
+      filterData.push({
+        'label': `${this.props.filteredDataHeaders[i].label}`, 'id': `${this.props.filteredDataHeaders[i].key}`,
+        'data': [...new Set(this.props.filteredData.map((item, index) => {
+          return { value: item[this.props.filteredDataHeaders[i].key], label: item[this.props.filteredDataHeaders[i].key], key: this.props.filteredDataHeaders[i].key }
+        }))]
+      })
+      filterData[i]['data'] = filterData[i]['data'].reduce((r, i) =>
+        !r.some(j => i.label === j.label) ? [...r, i] : r
+        , []);
     }
+
     return (
       <Fragment>
         <button
@@ -87,7 +102,7 @@ class Filters extends Component {
           <div id="sidenav">
             <div id="closebtn">
               <span className="hl-medium" onClick={this.clearSelection}>Clear Section</span>
-              <span aria-hidden="true" aria-expanded={this.state.isFilters} 
+              <span aria-hidden="true" aria-expanded={this.state.isFilters}
                 onClick={this.toggleFilters}
                 className="icon icon-remove"></span>
             </div>
@@ -95,20 +110,11 @@ class Filters extends Component {
               {filterData.map((value, i) => (
                 <div key={i}>
                   <h1 className="hl-medium scrollable">{value.label}</h1>
-                  <ul>{value.data.map((x, ikey) =>
-                    <li key={ikey}>
-                      <label>
-                        <input
-                          type="checkbox"
-                          name={x}
-                          onChange={e => this.changeFilter(e, value.id, x)}
-                          checked={filters[value.id].indexOf(x) > -1}
-                          />{" "}
-                        {x}
-                      </label>
-                    </li>
-                  )}
-                  </ul>
+                  <UICheckSelection name={i.toString()}
+                      choices={value.data}
+                      default={selectionFilter}
+                      onValidatedChange={(key, label) => this.changeFilter(key, label, value.id)}
+                      />
                 </div>
               ))}
             </div>
