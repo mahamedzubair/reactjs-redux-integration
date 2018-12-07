@@ -29,7 +29,8 @@ class UITable extends Component {
     if (newProps.data !== currentState.data) {
       return {
         data: newProps.data,
-        isFilterData: [...newProps.data]
+        isFilterData: [...newProps.data],
+        isLoaded: true
       };
     }
     return null;

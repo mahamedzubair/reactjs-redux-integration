@@ -35,16 +35,23 @@ class Filters extends Component {
 
   }
 
-  changeFilter = (key, value, list) => {
+  changeFilter = (name, value, key) => {
     let filters = this.state.filters;
-    if (!filters[list]) {
-      filters[list] = [];
+    if (!filters[key]) {
+      filters[key] = [];
     }
-    if (filters[list].indexOf(value) === -1) {
-      filters[list].push(value[0])
+    if (filters[key].indexOf(value[value.length - 1]) === -1 && value.length &&
+      this.props.filteredData.map(x => x[key]).indexOf(value[value.length - 1]) > -1) {
+      filters[key].push(value[value.length - 1])
     }
+    filters[key].forEach((list, index) => {
+      if (value.indexOf(list) === -1) {
+        filters[key].splice(index, 1)
+      }
+    });
     this.setState({ filters: filters });
   };
+
   onFilterChange = () => {
     let filters = { ... this.state.filters }
     for (let key in filters) {
@@ -61,7 +68,7 @@ class Filters extends Component {
           });
         });
       });
-      this.setState({ filteredData: filteredData, isFilters: !this.state.isFilters });
+      this.setState({ filteredData: filteredData });
       this.props.filterChange(filteredData);
     }
   };
@@ -74,7 +81,11 @@ class Filters extends Component {
     let filters = this.filterListInit();
     let selectionFilter = [];
     for (let key in filters) {
-      selectionFilter = new Set([...selectionFilter, ...filters[key]])
+      filters[key].forEach((list, i) => {
+        if (selectionFilter.indexOf(list) === -1) {
+          selectionFilter.push(list)
+        }
+      });
     }
     const { t } = this.props;
     let filterData = [];
@@ -111,14 +122,17 @@ class Filters extends Component {
                 <div key={i}>
                   <h1 className="hl-medium scrollable">{value.label}</h1>
                   <UICheckSelection name={i.toString()}
-                      choices={value.data}
-                      default={selectionFilter}
-                      onValidatedChange={(key, label) => this.changeFilter(key, label, value.id)}
-                      />
+                    choices={value.data}
+                    defaultValue={selectionFilter}
+                    onValidatedChange={(key, label) => this.changeFilter(key, label, value.id)}
+                    />
                 </div>
               ))}
             </div>
-            <button onClick={() => this.onFilterChange()}>
+            <button onClick={() => {
+              this.onFilterChange();
+              this.toggleFilters();
+            } }>
               Apply Filters
               </button>
             <button onClick={() => this.props.saveFilters()}>
