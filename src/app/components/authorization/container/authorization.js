@@ -83,6 +83,7 @@ class Authorization extends Component {
             providerRowDisplay='facilityprovider'
             uniqueKey="id"
             showDetails={true}
+            isLoaded={this.props.data.isLoaded}
             />
         </div>
       </div>

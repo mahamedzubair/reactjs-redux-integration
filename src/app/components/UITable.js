@@ -21,7 +21,6 @@ class UITable extends Component {
       },
       isFilterData: [...this.props.data],
       isFilters: false,
-      isLoaded: false,
     };
   }
 
@@ -29,8 +28,7 @@ class UITable extends Component {
     if (newProps.data !== currentState.data) {
       return {
         data: newProps.data,
-        isFilterData: [...newProps.data],
-        isLoaded: true
+        isFilterData: [...newProps.data]
       };
     }
     return null;
@@ -72,7 +70,7 @@ class UITable extends Component {
 
   render() {
     const { t } = this.props;
-    const loadSize = this.state.isLoaded
+    const loadSize = this.props.isLoaded
       ? this.state.isFilterData.length
       : this.props.defaultRowDisplay;
 
@@ -200,7 +198,7 @@ class UITable extends Component {
             } }
           </MediaQuery>
         </table>
-        {!this.state.isLoaded &&
+        {!this.props.isLoaded &&
           this.state.isFilterData.length >
           this.props.defaultRowDisplay && (
             <div className="row top-1x text-center">

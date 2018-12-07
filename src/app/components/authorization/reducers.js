@@ -3,7 +3,8 @@ const INITIAL_STATE = {
   authData: [],
   filters: [],
   columns: [],
-  filteredData: []
+  filteredData: [],
+  isLoaded: false
 };
 
 const AuthReducer = (state = INITIAL_STATE, action) => {
@@ -38,7 +39,8 @@ const AuthReducer = (state = INITIAL_STATE, action) => {
       // Providing error message to state, to be able display it in UI.
       console.log('action', action)
       return Object.assign({}, state, {
-        filteredData: action.payload.filteredData
+        filteredData: action.payload.filteredData,
+        isLoaded: true
       });
     default:
       return state;
