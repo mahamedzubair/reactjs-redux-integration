@@ -109,38 +109,40 @@ class Filters extends Component {
           onClick={this.toggleFilters}>
           <span aria-hidden="true" className="icon-filter" />
         </button>
-        {this.state.isFilters &&
-          <div id="sidenav">
-            <div id="closebtn">
-              <span className="hl-medium" onClick={this.clearSelection}>Clear Section</span>
-              <span aria-hidden="true" aria-expanded={this.state.isFilters}
-                onClick={this.toggleFilters}
-                className="icon icon-remove"></span>
+        <div className={this.state.isFilters ? 'active filter-list' : 'in-active filter-list'}>
+          {this.state.isFilters &&
+            <div id="sidenav" >
+              <div id="closebtn">
+                <span className="hl-medium" onClick={this.clearSelection}>Clear Section</span>
+                <span aria-hidden="true" aria-expanded={this.state.isFilters}
+                  onClick={this.toggleFilters}
+                  className="icon icon-remove"></span>
+              </div>
+              <div className="sidenav-content">
+                {filterData.map((value, i) => (
+                  <div key={i}>
+                    <h1 className="hl-medium scrollable">{value.label}</h1>
+                    <UICheckSelection name={i.toString()}
+                      choices={value.data}
+                      defaultValue={selectionFilter}
+                      onValidatedChange={(key, label) => this.changeFilter(key, label, value.id)}
+                      />
+                  </div>
+                ))}
+              </div>
+              <button onClick={() => {
+                this.onFilterChange();
+                this.toggleFilters();
+              } }>
+                Apply Filters
+                </button>
+              <button onClick={() => this.props.saveFilters()}>
+                Save Filters
+                </button>
             </div>
-            <div className="sidenav-content">
-              {filterData.map((value, i) => (
-                <div key={i}>
-                  <h1 className="hl-medium scrollable">{value.label}</h1>
-                  <UICheckSelection name={i.toString()}
-                    choices={value.data}
-                    defaultValue={selectionFilter}
-                    onValidatedChange={(key, label) => this.changeFilter(key, label, value.id)}
-                    />
-                </div>
-              ))}
-            </div>
-            <button onClick={() => {
-              this.onFilterChange();
-              this.toggleFilters();
-            } }>
-              Apply Filters
-              </button>
-            <button onClick={() => this.props.saveFilters()}>
-              Save Filters
-              </button>
-          </div>
 
-        }
+          }
+        </div>
       </Fragment>
     );
   }

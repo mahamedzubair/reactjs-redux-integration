@@ -111,6 +111,18 @@
   border-bottom: 1px solid #cacaca;
   width: 100px;
 }
+.filter-list {
+  &.in-active  {
+    opacity: 0;
+    -webkit-transition: opacity 1s;
+    transition: opacity 1s;
+  }
+  &.active {
+    -webkit-transition: opacity 1s;
+    transition: opacity 1s;
+    opacity: 1;
+  }
+}
 
 #sidenav {
   width: 25%;
@@ -123,13 +135,6 @@
   overflow-x: hidden;
   z-index: 1;
   padding-top: 60px;
-  &#hide {
-    transform: translate3d(-100vw, 0, 0);
-    overflow: hidden;
-  }
-  &#show {
-    transform: translate3d(0vw, 0, 0);
-  }
   #closebtn {
     position: absolute;
     top: 10px;
@@ -271,5 +276,5 @@ body {
 
 .sidenav-content {
   height: 80%;
-  overflow-x: auto
+  overflow-x: auto;
 }
