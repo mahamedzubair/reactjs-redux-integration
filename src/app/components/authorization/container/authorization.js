@@ -70,6 +70,7 @@ class Authorization extends Component {
                 filterVisibility={true}
                 filterChange={this.filterData}
                 uniqueKey="id"
+                filterMaxList={4}
                 />
             </div>
           </div>

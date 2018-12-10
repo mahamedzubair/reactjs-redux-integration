@@ -3,6 +3,7 @@ import { withRouter } from "react-router";
 import { translate } from "react-i18next";
 import '../../../scss/custom.scss';
 import UICheckSelection from '../../../components/UI/UICheckSelection';
+import UIAccordion from '../../../components/UI/UIAccordion';
 
 //@translate(["common"])
 class Filters extends Component {
@@ -77,8 +78,30 @@ class Filters extends Component {
     this.setState({ isFilters: !this.state.isFilters });
   };
 
+  listContent = (list, selectionFilter) => {
+    return (<div className="filter-list">
+            <UICheckSelection name='list'
+              choices={list['data']}
+              defaultValue={selectionFilter}
+              onValidatedChange={(key, label) => this.changeFilter(key, label, list.id)}
+              />
+            { "showMore" in list && <button
+              type="button"
+              className="button secondary"
+              onClick={() =>  {
+                list.showMore = !list.showMore;
+                this.listContent(list, selectionFilter);
+              }}
+              >
+              {list.showMore ? "View More" : "View Less" }
+            </button> }
+          </div>)
+          
+  }
+
   render() {
-    let filters = this.filterListInit();
+   
+   let filters = this.filterListInit();
     let selectionFilter = [];
     for (let key in filters) {
       filters[key].forEach((list, i) => {
@@ -92,7 +115,7 @@ class Filters extends Component {
     let filterLimitedIndex = this.props.filterLimitedIndex && this.props.filteredDataHeaders.length >= this.props.filterLimitedIndex ? this.props.filterLimitedIndex : this.props.filteredDataHeaders.length;
     for (let i = 0; i < filterLimitedIndex; i++) {
       filterData.push({
-        'label': `${this.props.filteredDataHeaders[i].label}`, 'id': `${this.props.filteredDataHeaders[i].key}`,
+        'label': `${this.props.filteredDataHeaders[i].label}`, 'header': `${this.props.filteredDataHeaders[i].label}`, 'id': `${this.props.filteredDataHeaders[i].key}`,
         'data': [...new Set(this.props.filteredData.map((item, index) => {
           return { value: item[this.props.filteredDataHeaders[i].key], label: item[this.props.filteredDataHeaders[i].key], key: this.props.filteredDataHeaders[i].key }
         }))]
@@ -100,6 +123,8 @@ class Filters extends Component {
       filterData[i]['data'] = filterData[i]['data'].reduce((r, i) =>
         !r.some(j => i.label === j.label) ? [...r, i] : r
         , []);
+      filterData[i]['data'].length > this.props.filterMaxList ? filterData[i].showMore = true : delete filterData[i].showMore;
+      filterData[i]['body'] = this.listContent(filterData[i], selectionFilter)
     }
 
     return (
@@ -119,16 +144,10 @@ class Filters extends Component {
                   className="icon icon-remove"></span>
               </div>
               <div className="sidenav-content">
-                {filterData.map((value, i) => (
-                  <div key={i}>
-                    <h1 className="hl-medium scrollable">{value.label}</h1>
-                    <UICheckSelection name={i.toString()}
-                      choices={value.data}
-                      defaultValue={selectionFilter}
-                      onValidatedChange={(key, label) => this.changeFilter(key, label, value.id)}
-                      />
-                  </div>
-                ))}
+                <UIAccordion className="accordion-sample"
+                  openNextPanel={true} allowManyPanelsToBeOpen={true} icon={false} openFirstPanelOnDefault={true}>
+                  {filterData}
+                </UIAccordion>
               </div>
               <button onClick={() => {
                 this.onFilterChange();
