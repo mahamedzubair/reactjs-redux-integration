@@ -4,6 +4,8 @@ import { translate } from "react-i18next";
 import '../../../scss/custom.scss';
 import UICheckSelection from '../../../components/UI/UICheckSelection';
 import UIAccordion from '../../../components/UI/UIAccordion';
+import FilterList from './FilterList/FilterList';
+
 
 //@translate(["common"])
 class Filters extends Component {
@@ -78,25 +80,10 @@ class Filters extends Component {
     this.setState({ isFilters: !this.state.isFilters });
   };
 
-  listContent = (list, selectionFilter) => {
-    return (<div className="filter-list">
-            <UICheckSelection name='list'
-              choices={list['data']}
-              defaultValue={selectionFilter}
-              onValidatedChange={(key, label) => this.changeFilter(key, label, list.id)}
-              />
-            { "showMore" in list && <button
-              type="button"
-              className="button secondary"
-              onClick={() =>  {
-                list.showMore = !list.showMore;
-                this.listContent(list, selectionFilter);
-              }}
-              >
-              {list.showMore ? "View More" : "View Less" }
-            </button> }
-          </div>)
-          
+  listContent = (data, selectionFilter) => {
+    return (<FilterList dataList={data} selectionFilter={selectionFilter} 
+            filterMaxList={this.props.filterMaxList}
+            changeFilter={this.changeFilter}/>)
   }
 
   render() {
@@ -123,7 +110,6 @@ class Filters extends Component {
       filterData[i]['data'] = filterData[i]['data'].reduce((r, i) =>
         !r.some(j => i.label === j.label) ? [...r, i] : r
         , []);
-      filterData[i]['data'].length > this.props.filterMaxList ? filterData[i].showMore = true : delete filterData[i].showMore;
       filterData[i]['body'] = this.listContent(filterData[i], selectionFilter)
     }
 
