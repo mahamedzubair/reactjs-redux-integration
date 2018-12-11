@@ -120,7 +120,7 @@ class Filters extends Component {
           onClick={this.toggleFilters}>
           <span aria-hidden="true" className="icon-filter" />
         </button>
-        <div className={this.state.isFilters ? 'active filter-list' : 'in-active filter-list'}>
+        <div className={this.state.isFilters ? 'active filter-list-content' : 'in-active filter-list-content'}>
           {this.state.isFilters &&
             <div id="sidenav" >
               <div id="closebtn">

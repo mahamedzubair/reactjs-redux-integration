@@ -4,7 +4,8 @@ const INITIAL_STATE = {
   filters: [],
   columns: [],
   filteredData: [],
-  isLoaded: false
+  isLoaded: false,
+  hideNotify: false
 };
 
 const AuthReducer = (state = INITIAL_STATE, action) => {
@@ -19,8 +20,9 @@ const AuthReducer = (state = INITIAL_STATE, action) => {
       let data = [...action.authData];
       data = data.map((list, index) => {
         list['claimAppealed'] = false;
+        list['savedCost'] = false;
         if (index === 2 || index === 3) {
-          list['claimAppealed'] = true;
+          list['savedCost'] = true;
         }
         return list;
       });
@@ -40,7 +42,17 @@ const AuthReducer = (state = INITIAL_STATE, action) => {
       console.log('action', action)
       return Object.assign({}, state, {
         filteredData: action.payload.filteredData,
-        isLoaded: true
+        isLoaded: false
+      });
+
+      case 'CLOSE_NOTIFY':
+      return Object.assign({}, state, {
+        hideNotify: true
+      });
+
+      case 'TOGGLE_LIST':
+      return Object.assign({}, state, {
+        isLoaded: action.payload.isLoaded
       });
     default:
       return state;

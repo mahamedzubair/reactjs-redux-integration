@@ -111,30 +111,26 @@
   border-bottom: 1px solid #cacaca;
   width: 100px;
 }
-.filter-list {
+.filter-list-content {
+    position: fixed;
+    height: 100%;
+    left: 0;
+    top: 0;
+    overflow-x: hidden;
+    -webkit-transition:  0.4s;
+    transition:  0.4s;
   &.in-active  {
-    opacity: 0;
-    -webkit-transition: opacity 1s;
-    transition: opacity 1s;
+    width: 0;
   }
   &.active {
-    -webkit-transition: opacity 1s;
-    transition: opacity 1s;
-    opacity: 1;
+    width: 25%;
   }
 }
 
 #sidenav {
-  width: 25%;
-  height: 75%;
   background-color: #fff;
-  position: fixed;
-  top: 0;
-  left: 0;
-  transition: 0.5s;
-  overflow-x: hidden;
-  z-index: 1;
   padding-top: 60px;
+  height: 100%;
   #closebtn {
     position: absolute;
     top: 10px;

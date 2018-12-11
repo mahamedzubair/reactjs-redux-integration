@@ -27,7 +27,6 @@ export function fetchAuthorization() {
 }
 
 export function filterAuthorization(filteredData) {
-  console.log('filteredData action', filteredData)
   return {
       type: "FILTER_AUTH_DATA",
       payload: {
@@ -36,3 +35,20 @@ export function filterAuthorization(filteredData) {
   }
 }
 
+export function closeNotification() {
+  return {
+    type: "CLOSE_NOTIFY",
+    payload : {
+      hideNotify : true
+    }
+  }
+}
+
+export function toggleList() {
+  return {
+    type: "TOGGLE_LIST",
+    payload : {
+      isLoaded  : true
+    }
+  }
+}

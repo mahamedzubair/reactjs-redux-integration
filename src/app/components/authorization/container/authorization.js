@@ -8,6 +8,8 @@ import * as links from '../../../constants/routes';
 import * as Actions from '../actions';
 import { Link } from "react-router-dom";
 import Filters from "../../../routes/filter/containers/Filter";
+import NotificationBar from "../../UI/UINotification";
+
 
 //@translate(["common","authorization"])
 class Authorization extends Component {
@@ -22,8 +24,17 @@ class Authorization extends Component {
     this.props.dispatch(Actions.filterAuthorization(data));
   } 
 
+  closeNotification = () => {
+    this.props.dispatch(Actions.closeNotification())
+  }
+
+  toggleDataList = () => {
+    this.props.dispatch(Actions.toggleList())
+  }
+
   render() {
-    const {t} = this.props
+    const {t} = this.props;
+    const DEFAULTROWDISPLAY = 10;
     const columns = [
       {
         label: "Facility Provider", //t('authorization:table.facilityprovider'),
@@ -44,17 +55,28 @@ class Authorization extends Component {
         sort: true
       },
       {
+        label: "Your Cost", //t('authorization:table.status'),
+        name: "Your Cost",
+        key: "yourcost",
+        sort: true
+      },
+      {
         label: "Status", //t('authorization:table.status'),
         name: "Status",
-        key: "status",
-        sort: true
+        key: "status"
       }
     ];
-    console.log('this.props', this.props)
     return (
       <div className="row">
         <div className="small-12 large-12 medium-12 columns">
           <h1 className="hl-large header">Authorization</h1>
+          { this.props.data.filteredData.some((list) => list.savedCost) && 
+            !this.props.data.hideNotify &&
+            <NotificationBar name="Cost Status" 
+            title={`$ Saving Alert Next Time Save $`} 
+            onClose={this.closeNotification}
+            onClick={this.closeNotification}/>
+          }
           <div className="row">
             <div className="columns medium-6 large-6">
               <Link className="button naked mobile-view" to={links.HEALTHINSURANCE}>
@@ -72,12 +94,17 @@ class Authorization extends Component {
                 uniqueKey="id"
                 filterMaxList={4}
                 />
+                 <div className="desktop-view columns medium-6 large-6 text-right">
+                    Displaying { this.props.data.isLoaded || this.props.data.filteredData.length < DEFAULTROWDISPLAY ? 
+                      this.props.data.filteredData.length: DEFAULTROWDISPLAY }/
+                    {this.props.data.filteredData.length} Claims
+                </div>
             </div>
           </div>
           <UITable
             data={this.props.data.filteredData}
             headers={columns}
-            defaultRowDisplay={10}
+            defaultRowDisplay={DEFAULTROWDISPLAY}
             name="authorization"
             sortable={true}
             pageLink={links.CLAIMSOVERVIEW}
@@ -86,6 +113,21 @@ class Authorization extends Component {
             showDetails={true}
             isLoaded={this.props.data.isLoaded}
             />
+
+            {!this.props.data.isLoaded &&
+              this.props.data.filteredData.length > DEFAULTROWDISPLAY && 
+              (<div className="row top-1x text-center">
+                  <div className="columns small-12 ">
+                    <button
+                      type="button"
+                      className="button secondary"
+                      onClick={this.toggleDataList}
+                      >
+                      View More
+                    </button>
+                  </div>
+                </div>
+              )}
         </div>
       </div>
     );

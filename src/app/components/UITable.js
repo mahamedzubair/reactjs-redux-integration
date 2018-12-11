@@ -21,14 +21,17 @@ class UITable extends Component {
       },
       isFilterData: [...this.props.data],
       isFilters: false,
+      isLoaded: false
     };
   }
 
   static getDerivedStateFromProps(newProps, currentState) {
+    console.log('newProps', newProps);
     if (newProps.data !== currentState.data) {
       return {
         data: newProps.data,
-        isFilterData: [...newProps.data]
+        isFilterData: [...newProps.data],
+        isLoaded: newProps.isLoaded
       };
     }
     return null;
@@ -76,9 +79,7 @@ class UITable extends Component {
 
     return (
       <Fragment>
-        <div className="desktop-view columns medium-6 large-6 text-right">
-          Displaying{loadSize}/{this.state.isFilterData.length} Claims
-        </div>
+       
         <table id={this.props.name} className="dataTable responsiveTable">
           <thead>
             <tr>
@@ -141,6 +142,9 @@ class UITable extends Component {
                                 key={dataIndex}
                                 data-title={rowData[obj.key]}
                                 >
+                                {obj.key === "yourcost" && rowData.savedCost
+                                  ? <span className="desktop-view">$ </span>
+                                  : ""}
                                 { rowData[obj.key]}
                                 <br />
                                 {obj.key === "status" && rowData.claimAppealed
@@ -198,21 +202,6 @@ class UITable extends Component {
             } }
           </MediaQuery>
         </table>
-        {!this.props.isLoaded &&
-          this.state.isFilterData.length >
-          this.props.defaultRowDisplay && (
-            <div className="row top-1x text-center">
-              <div className="columns small-12 ">
-                <button
-                  type="button"
-                  className="button secondary"
-                  onClick={() => this.setState({ isLoaded: true })}
-                  >
-                  View More
-                </button>
-              </div>
-            </div>
-          )}
       </Fragment>
     );
   };
