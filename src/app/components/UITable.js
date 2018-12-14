@@ -154,7 +154,9 @@ class UITable extends Component {
                             ))}
                             {this.props.showDetails &&
                               <td>
-                                <Link to={this.props.pageLink}>
+                                <Link to={
+                                    { pathname: this.props.pageLink,
+                                      state: { rowData }}} >
                                   Show Details
                                 </Link>
                               </td>
@@ -184,7 +186,10 @@ class UITable extends Component {
                                   data-title={rowData[obj.key]}
                                   className="pivoted"
                                   >
-                                  <Link to={this.props.pageLink} className="details-view">
+                                  <Link to={
+                                    { pathname: this.props.pageLink,
+                                      state: { linkState: obj }}} 
+                                    className="details-view">
                                     <div className="tdBefore">
                                       {obj.key === this.props.providerRowDisplay ? rowData[obj.key] : obj.name}
                                     </div>
