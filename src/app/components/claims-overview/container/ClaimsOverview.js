@@ -11,27 +11,30 @@ class ClaimsOverview extends Component {
         this.setState({hideNotifiaction: true})
     }
     render() {
+        let queryString = {}; 
+        this.props.location.search.substring(1).replace(/([^=&]+)=([^&]*)/g, 
+            (m, key, value) => queryString[decodeURIComponent(key)] = decodeURIComponent(value)); 
         return (
             <div>
                 <div> 
-                    Recieve Data: {this.props.location.state.rowData.receiveddate}
+                    Recieve Data: {queryString.receiveddate}
                     <br/>
-                    claimAppealed:  {this.props.location.state.rowData.claimAppealed.toString()}
+                    claimAppealed:  {queryString.claimAppealed.toString()}
                     <br/>
-                    receiveddate:  {this.props.location.state.rowData.receiveddate}
+                    receiveddate:  {queryString.receiveddate}
                     <br/>
-                    savedCost:  {this.props.location.state.rowData.savedCost}
+                    savedCost:  {queryString.savedCost}
                     <br/>
-                    servicetype:  {this.props.location.state.rowData.servicetype}
+                    servicetype:  {queryString.servicetype}
                     <br/>
-                    status:  {this.props.location.state.rowData.status}
+                    status:  {queryString.status}
                     <br/>
-                    yourcost:  {this.props.location.state.rowData.yourcost}
+                    yourcost:  {queryString.yourcost}
                 </div>
-                { this.props.location.state.rowData.savedCost && 
+                { queryString.savedCost && 
                     !this.state.hideNotifiaction &&
                     <NotificationBar name="Cost Status" 
-                    title={`$ Saving Alert Next Time Save ${this.props.location.state.rowData.yourcost}`} 
+                    title={`$ Saving Alert Next Time Save ${queryString.yourcost}`} 
                     onClose={this.closeNotification}
                     onClick={this.closeNotification}/>
                 }

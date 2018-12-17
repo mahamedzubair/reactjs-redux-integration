@@ -156,7 +156,11 @@ class UITable extends Component {
                               <td>
                                 <Link to={
                                     { pathname: this.props.pageLink,
-                                      state: { rowData }}} >
+                                      search: `?${Object.keys(rowData).reduce( (a,k) => {
+                                                 a.push(k+'='+encodeURIComponent(rowData[k]));
+                                                 return a
+                                                },[]).join('&')
+                                                }`}} >
                                   Show Details
                                 </Link>
                               </td>
@@ -188,7 +192,11 @@ class UITable extends Component {
                                   >
                                   <Link to={
                                     { pathname: this.props.pageLink,
-                                      state: { linkState: obj }}} 
+                                      search: `?${Object.keys(rowData).reduce( (a,k) => {
+                                                 a.push(k+'='+encodeURIComponent(rowData[k]));
+                                                 return a
+                                                }, []).join('&')
+                                                }`}} 
                                     className="details-view">
                                     <div className="tdBefore">
                                       {obj.key === this.props.providerRowDisplay ? rowData[obj.key] : obj.name}
