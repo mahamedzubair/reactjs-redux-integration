@@ -274,3 +274,9 @@ body {
   height: 80%;
   overflow-x: auto;
 }
+.chart  {
+  display: inline !important;
+  canvas {
+    display: inline !important;
+  }
+}

@@ -1,0 +1,81 @@
+{
+    "responseCode": "0",
+    "description": "OK",
+    "partyid": "10000053588",
+    "transactionId": "123",
+    "sourceSystem": "UI",
+    "data": {
+      "claims": [
+        {
+          "claimId": "10001",
+          "service": "10/02/2018",
+          "facility": "CVS#211",
+          "type": "Health",
+          "status": "Processed",
+          "claimAppealed": "N",
+          "claimCharge": "$2.49",
+          "yourCost": "$2.49"
+        },
+        {
+          "claimId": "10002",
+          "service": "10/01/2018",
+          "facility": "CVS#232",
+          "type": "Health",
+          "status": "Processed",
+          "claimAppealed": "N",
+          "claimCharge": "$2.49",
+          "yourCost": "$2.49"
+        },
+        {
+          "claimId": "10003",
+          "service": "09/27/2018",
+          "facility": "Mayo Clinic",
+          "type": "Pharmacy",
+          "status": "Processed",
+          "claimAppealed": "Y",
+          "claimCharge": "$2.49",
+          "yourCost": "$2.49"
+        },
+        {
+          "claimId": "10004",
+          "service": "08/27/2018",
+          "facility": "CVS#211",
+          "type": "Health",
+          "status": "Processed",
+          "claimAppealed": "N",
+          "claimCharge": "$2.49",
+          "yourCost": "$2.49"
+        },
+        {
+          "claimId": "10005",
+          "service": "07/27/2018",
+          "facility": "Dr.Price",
+          "type": "Health",
+          "status": "Processed",
+          "claimAppealed": "N",
+          "claimCharge": "$2.49",
+          "yourCost": "$2.49"
+        },
+        {
+          "claimId": "10006",
+          "service": "06/27/2018",
+          "facility": "Mitchell Jones",
+          "type": "Health",
+          "status": "Processed",
+          "claimAppealed": "N",
+          "claimCharge": "$2.49",
+          "yourCost": "$2.49"
+        },
+        {
+          "claimId": "10007",
+          "service": "04/27/2018",
+          "facility": "Walgreens",
+          "type": "Health",
+          "status": "Denied",
+          "claimAppealed": "N",
+          "claimCharge": "$2.49",
+          "yourCost": "$2.49"
+        }
+      ]
+    }
+  }

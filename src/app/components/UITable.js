@@ -154,13 +154,8 @@ class UITable extends Component {
                             ))}
                             {this.props.showDetails &&
                               <td>
-                                <Link to={
-                                    { pathname: this.props.pageLink,
-                                      search: `?${Object.keys(rowData).reduce( (a,k) => {
-                                                 a.push(k+'='+encodeURIComponent(rowData[k]));
-                                                 return a
-                                                },[]).join('&')
-                                                }`}} >
+                                <Link 
+                                  to={`${this.props.pageLink}/${rowData.id}/${rowData.id}/${rowData.savedCost}`} >
                                   Show Details
                                 </Link>
                               </td>
@@ -190,13 +185,8 @@ class UITable extends Component {
                                   data-title={rowData[obj.key]}
                                   className="pivoted"
                                   >
-                                  <Link to={
-                                    { pathname: this.props.pageLink,
-                                      search: `?${Object.keys(rowData).reduce( (a,k) => {
-                                                 a.push(k+'='+encodeURIComponent(rowData[k]));
-                                                 return a
-                                                }, []).join('&')
-                                                }`}} 
+                                  <Link
+                                    to={`${this.props.pageLink}/${rowData.id}/${rowData.id}/${rowData.savedCost}`} 
                                     className="details-view">
                                     <div className="tdBefore">
                                       {obj.key === this.props.providerRowDisplay ? rowData[obj.key] : obj.name}

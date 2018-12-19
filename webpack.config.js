@@ -19,8 +19,19 @@ var config = {
                 query: {
                     presets: ["react", "es2015", "stage-2"]
                 }
-            }
+            },
+            {
+                test: /\.scss$/,
+                loaders: [
+                    require.resolve('style-loader'),
+                    require.resolve('css-loader'),
+                    require.resolve('sass-loader')
+                ]
+            },
         ]
+    },
+    devServer: {
+        port: 3000 // <--- Add this line and choose your own port number
     }
 };
 

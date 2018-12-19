@@ -16,7 +16,7 @@ class App extends React.Component {
                 <Fragment>
                     <Route path="/auth" component={Authorization}/>
                     <Route path="/claims" component={Claims}/>
-                    <Route path="/claimsoverview" component={ClaimsOverview}/>
+                    <Route path="/claimsoverview/:partyId/:claimId/:savedCost" component={ClaimsOverview}/>
                     <TitleRoute exact={true} path="/benefits/preventivecareservices" component={Benefits}  childComponent={PrescriptionDrugServices} />
                     <TitleRoute exact={true} path="/benefits/medicalbenefits" component={Benefits}  childComponent={ListDrugServices} />
                 </Fragment>

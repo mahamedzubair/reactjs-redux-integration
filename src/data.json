@@ -2,109 +2,124 @@
 	"cipId": "12345",
 	"name" : "John",
 	"claimsList": [{
+			"id": 1,
 			"receiveddate": "10/01/2018",
 			"facilityprovider": "Jacksonville Va Specialty Clinic",
 			"servicetype": "Pharmacy",
 			"status": "Closed",
-			"showdetails": "Show Details"
+			"yourcost": "$45"
 		},
 		{
+			"id": 2,
 			"receiveddate": "10/09/2018",
 			"facilityprovider": "CVS",
 			"servicetype": "Health",
 			"status": "Open",
-			"showdetails": "Show Details"
+			"yourcost": "$45"
 		},
 		{
+			"id": 3,
 			"receiveddate": "09/01/2018",
 			"facilityprovider": "Life Care Center of Jacksonville",
 			"servicetype": "Pharmacy",
 			"status": "Open",
-			"showdetails": "Show Details"
+			"yourcost": "$45"
 		},
 		{
+			"id": 4,
 			"receiveddate": "09/27/2018",
 			"facilityprovider": "CVS #232",
 			"servicetype": "Health",
 			"status": "Open",
-			"showdetails": "Show Details"
+			"yourcost": "$45"
 		},
 		{
+			"id": 5,
 			"receiveddate": "08/25/2018",
 			"facilityprovider": "CVS #231",
 			"servicetype": "Pharmacy",
 			"status": "Closed",
-			"showdetails": "Show Details"
+			"yourcost": "$45"
 		},
 		{
+			"id": 6,
 			"receiveddate": "10/09/2018",
 			"facilityprovider": "CVS #232",
 			"servicetype": "Health",
 			"status": "Closed",
-			"showdetails": "Show Details"
+			"yourcost": "$45"
 		},
 		{
+			"id": 7,
 			"receiveddate": "10/09/2018",
 			"facilityprovider": "CVS #232",
 			"servicetype": "Pharmacy",
 			"status": "Open",
-			"showdetails": "Show Details"
+			"yourcost": "$45"
 		},
 		{
+			"id": 8,
 			"receiveddate": "10/09/2018",
 			"facilityprovider": "CVS #232",
 			"servicetype": "Health",
 			"status": "Open",
-			"showdetails": "Show Details"
+			"yourcost": "$45"
 		},
 		{
+			"id": 9,
 			"receiveddate": "10/09/2018",
 			"facilityprovider": "CVS #232",
 			"servicetype": "Pharmacy",
 			"status": "Open",
-			"showdetails": "Show Details"
+			"yourcost": "$77"
 		},
 		{
+			"id": 10,
 			"receiveddate": "10/09/2018",
 			"facilityprovider": "CVS #232",
 			"servicetype": "Health",
 			"status": "Open",
-			"showdetails": "Show Details"
+			"yourcost": "$99"
 		},
 		{
+			"id": 11,
 			"receiveddate": "10/09/2018",
 			"facilityprovider": "CVS #232",
 			"servicetype": "Pharmacy",
 			"status": "Open",
-			"showdetails": "Show Details"
+			"yourcost": "$67"
 		},
 		{
+			"id": 12,
 			"receiveddate": "10/09/2018",
 			"facilityprovider": "CVS #232",
 			"servicetype": "Health",
 			"status": "Open",
-			"showdetails": "Show Details"
+			"yourcost": "$99"
 		},
 		{
+			"id": 13,
 			"receiveddate": "10/09/2018",
 			"facilityprovider": "CVS #232",
 			"servicetype": "Pharmacy",
 			"status": "Open",
-			"showdetails": "Show Details"
+			"yourcost": "$34"
 		},
 		{
+			"id": 14,
 			"receiveddate": "10/09/2018",
 			"facilityprovider": "CVS #232",
 			"servicetype": "Health",
 			"status": "Open",
-			"showdetails": "Show Details"
+			"yourcost": "$75"
 		},
 		{
+			"id": 15,
 			"receiveddate": "10/09/2018",
 			"facilityprovider": "CVS #232",
 			"servicetype": "Pharmacy",
 			"status": "Open",
-			"showdetails": "Show Details"
+			"yourcost": "$45"
 		}
 	]
 }
