@@ -11,12 +11,15 @@ class ClaimsOverview extends Component {
     constructor(props) {
     super(props);
         this.state = {
-            hideNotifiaction: false
+            toggleAccordion: false
         };
     }
 
     componentDidMount() {
         this.props.dispatch(Actions.fetchClaimOverview());
+    }
+    toggleAccordions = () => {
+        this.setState({toggleAccordion: !this.state.toggleAccordion})
     }
 
     renderOverviewDetails = () => {
@@ -155,6 +158,8 @@ class ClaimsOverview extends Component {
     // Render service details Accodion
 
     renderSeviceDetails = () => {
+        let serviceViewData = this.props.data.claimOverviewData.Response.Services;
+        let openAccoridon = this.state.toggleAccordion ? serviceViewData.length : 0;
         return (
             <div className="row">
                 <div className="small-12 columns">
@@ -164,14 +169,17 @@ class ClaimsOverview extends Component {
                         <h1 className="hl-medium">Service Under this Claim</h1>
                         </div>
                         <div className="columns small-6 text-right">
-                        <button className="linklike">
-                            <span>Expand all/collapse all</span>
+                        <button className="linklike" 
+                            onClick={this.toggleAccordions}>
+                            <span>{this.state.toggleAccordion ? "Collapse all" : "Expand all"}</span>
                         </button>
                         </div>
                     </div>
                     <div className="row body">
                         <div className="columns small-12">
-                        <UIAccordion className="accordion" allowManyPanelsToBeOpen>
+                        <UIAccordion className="accordion" 
+                            openAllNPanels={openAccoridon} 
+                            allowManyPanelsToBeOpen>
                             {this.renderAccordion()}
                         </UIAccordion>
                         </div>
@@ -241,8 +249,11 @@ class ClaimsOverview extends Component {
     }
 
     render() {
-        console.log('this.props', this.props)
         let overViewData = this.props.data.claimOverviewData;
+        let queryString = {}; 
+        this.props.location.search.substring(1).replace(/([^=&]+)=([^&]*)/g, 
+            (m, key, value) => queryString[decodeURIComponent(key)] = decodeURIComponent(value)); 
+
         return (
             <div className="row">
                 { overViewData.Response && 
@@ -277,7 +288,7 @@ class ClaimsOverview extends Component {
                             {this.renderBillingDetails(overViewData)}
                          </div>
                          { 
-                            JSON.parse(this.props.match.params.savedCost) &&
+                            queryString.savedCost && JSON.parse(queryString.savedCost) &&
                             this.renderSavingAlert()
                          }
                          {this.renderSeviceDetails()}
