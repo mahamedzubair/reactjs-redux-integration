@@ -15,13 +15,13 @@ import NotificationBar from "../../UI/UINotification";
 class Authorization extends Component {
 
   componentDidMount() {
-    this.props.dispatch(Actions.fetchAuthorization());
+    this.props.dispatch(Actions.fetchAuthorization({}));
   }
 
   /// @@@@@@@@ RENDERS ....................
 
-  filterData = ( data ) => {
-    this.props.dispatch(Actions.filterAuthorization(data));
+  filterData = ( request ) => {
+    this.props.dispatch(Actions.fetchAuthorization(request));
   } 
 
   closeNotification = () => {

@@ -5,6 +5,8 @@ import '../../../scss/custom.scss';
 import UICheckSelection from '../../../components/UI/UICheckSelection';
 import UIAccordion from '../../../components/UI/UIAccordion';
 import FilterList from './FilterList/FilterList';
+import { connect } from 'react-redux';
+import * as Actions from '../actions';
 
 
 //@translate(["common"])
@@ -14,20 +16,23 @@ class Filters extends Component {
     this.state = {
       filterData: this.props.filteredData,
       filters: {},
-      newfilter: [],
       headers: this.props.filteredDataHeaders,
       isFilters: false,
       filteredData: [... this.props.filteredData]
     };
   }
 
+  componentDidMount() {
+    this.props.dispatch(Actions.fetchFilters());
+  }
+
   filterListInit = (type = 'init') => {
     let filters = { ... this.state.filters };
-    this.props.filteredDataHeaders.forEach((element) => {
-      if (!filters[element.key] || type === 'clear') {
-        filters[element.key] = [];
+    for(let key in this.props.data.filterData[0]) {
+      if (!filters[key] || type === 'clear') {
+        filters[key] = [];
       }
-    });
+    }
     return filters;
   }
 
@@ -43,8 +48,7 @@ class Filters extends Component {
     if (!filters[key]) {
       filters[key] = [];
     }
-    if (filters[key].indexOf(value[value.length - 1]) === -1 && value.length &&
-      this.props.filteredData.map(x => x[key]).indexOf(value[value.length - 1]) > -1) {
+    if (filters[key].indexOf(value[value.length - 1]) === -1 && value.length ) {
       filters[key].push(value[value.length - 1])
     }
     filters[key].forEach((list, index) => {
@@ -57,22 +61,8 @@ class Filters extends Component {
 
   onFilterChange = () => {
     let filters = { ... this.state.filters }
-    for (let key in filters) {
-      if (!filters[key].length) {
-        delete filters[key];
-      }
-    }
-    let filteredData = [... this.props.filteredData];
-    if (this.state.filters) {
-      filteredData = filteredData.filter((list) => {
-        return Object.keys(filters).every((key) => {
-          return filters[key].some((value) => {
-            return !list[key].length || list[key] === value;
-          });
-        });
-      });
-      this.setState({ filteredData: filteredData });
-      this.props.filterChange(filteredData);
+    if (filters) {
+      this.props.filterChange(filters);
     }
   };
 
@@ -87,8 +77,7 @@ class Filters extends Component {
   }
 
   render() {
-   
-   let filters = this.filterListInit();
+    let filters = this.filterListInit();
     let selectionFilter = [];
     for (let key in filters) {
       filters[key].forEach((list, i) => {
@@ -98,21 +87,20 @@ class Filters extends Component {
       });
     }
     const { t } = this.props;
-    let filterData = [];
-    let filterLimitedIndex = this.props.filterLimitedIndex && this.props.filteredDataHeaders.length >= this.props.filterLimitedIndex ? this.props.filterLimitedIndex : this.props.filteredDataHeaders.length;
-    for (let i = 0; i < filterLimitedIndex; i++) {
-      filterData.push({
-        'label': `${this.props.filteredDataHeaders[i].label}`, 'header': `${this.props.filteredDataHeaders[i].label}`, 'id': `${this.props.filteredDataHeaders[i].key}`,
-        'data': [...new Set(this.props.filteredData.map((item, index) => {
-          return { value: item[this.props.filteredDataHeaders[i].key], label: item[this.props.filteredDataHeaders[i].key], key: this.props.filteredDataHeaders[i].key }
-        }))]
+      let filterData = [];
+    
+    for(let key in this.props.data.filterData[0]) {
+     filterData.push({
+        'label': `${key}`, 'header': `${key}`, 'id': `${key}`,
+        'data': this.props.data.filterData[0][key].map((item, index) => {
+          return { value: item, label: item, key: key }
+        })
       })
-      filterData[i]['data'] = filterData[i]['data'].reduce((r, i) =>
-        !r.some(j => i.label === j.label) ? [...r, i] : r
-        , []);
-      filterData[i]['body'] = this.listContent(filterData[i], selectionFilter)
     }
 
+    filterData.forEach((list, i) => {
+      list['body'] = this.listContent(list, selectionFilter)
+    });
     return (
       <Fragment>
         <button
@@ -153,7 +141,13 @@ class Filters extends Component {
   }
 }
 
-export default Filters;
+function mapStateToProps(state) {
+  return {
+    data: state.FilterReducer
+  };
+}
+
+export default connect(mapStateToProps)(Filters);
 
 
 

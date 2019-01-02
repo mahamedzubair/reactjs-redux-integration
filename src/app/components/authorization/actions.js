@@ -1,5 +1,5 @@
 import axios from 'axios';
-export function fetchAuthorization() {
+export function fetchAuthorization(request) {
   // Instead of plain objects, we are returning function.
   return function(dispatch) {
     // Dispatching REQUEST action, which tells our app, that we are started requesting autorization.
@@ -23,15 +23,6 @@ export function fetchAuthorization() {
           });
         console.log("fetchRequestFailed", error);
       });
-  }
-}
-
-export function filterAuthorization(filteredData) {
-  return {
-      type: "FILTER_AUTH_DATA",
-      payload: {
-          filteredData
-      }
   }
 }
 
