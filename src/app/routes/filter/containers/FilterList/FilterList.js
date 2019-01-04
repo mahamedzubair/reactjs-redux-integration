@@ -17,14 +17,16 @@ class FilterList extends Component {
   toggleList = () =>  {this.setState({ toggleList: !this.state.toggleList })}
   render() {
       let dataList = this.props.dataList;
-      let sliceCount = this.state.toggleList ? this.props.filterMaxList : this.props.dataList.data.length;
+      let sliceCount = this.state.toggleList && this.props.showMoreKey.indexOf(this.props.dataList.key) > -1 ? 
+        this.props.filterMaxCount : this.props.dataList.data.length;
       return (
           <div className="filter-list">
             <UICheckSelection name='list'
               choices={dataList.data.slice(0, sliceCount)}
               defaultValue={this.props.selectionFilter}
               onValidatedChange={(key, label) => this.props.changeFilter(key, label, dataList.id)}/>
-            {this.props.dataList.data.length > this.props.filterMaxList && 
+            {this.props.dataList.data.length > this.props.filterMaxCount
+                && this.props.showMoreKey.indexOf(this.props.dataList.key) > -1 && 
                 <UIDropDownButton 
                 buttonAction={this.toggleList}
                 type="toggle"

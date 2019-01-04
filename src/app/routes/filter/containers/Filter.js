@@ -14,11 +14,8 @@ class Filters extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filterData: this.props.filteredData,
       filters: {},
-      headers: this.props.filteredDataHeaders,
-      isFilters: false,
-      filteredData: [... this.props.filteredData]
+      isFilters: false
     };
   }
 
@@ -72,7 +69,8 @@ class Filters extends Component {
 
   listContent = (data, selectionFilter) => {
     return (<FilterList dataList={data} selectionFilter={selectionFilter} 
-            filterMaxList={this.props.filterMaxList}
+            filterMaxCount={this.props.filterMaxCount}
+            showMoreKey={this.props.showMoreKey}
             changeFilter={this.changeFilter}/>)
   }
 
@@ -91,7 +89,7 @@ class Filters extends Component {
     
     for(let key in this.props.data.filterData[0]) {
      filterData.push({
-        'label': `${key}`, 'header': `${key}`, 'id': `${key}`,
+        'label': `${key}`, 'header': `${key}`, 'id': `${key}`, 'key': `${key}`,
         'data': this.props.data.filterData[0][key].map((item, index) => {
           return { value: item, label: item, key: key }
         })

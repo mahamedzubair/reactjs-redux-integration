@@ -83,16 +83,11 @@ class Authorization extends Component {
                 <span aria-hidden="true" className="icon-chevron-left" />Back
               </Link>
               <Filters
-                filterLimitedIndex={this.props.filterLimitedIndex}
-                filterChange={this.onFilterChange}
-                filteredData={this.props.data.authData}
-                filteredDataHeaders={columns}
                 toggleFilters={this.toggleFilters}
                 filterAriaControl={this.filterAriaControl}
-                filterVisibility={true}
                 filterChange={this.filterData}
-                uniqueKey="id"
-                filterMaxList={4}
+                filterMaxCount={4}
+                showMoreKey={['providers']}
                 />
                  <div className="desktop-view columns medium-6 large-6 text-right">
                     Displaying { this.props.data.isLoaded || this.props.data.filteredData.length < DEFAULTROWDISPLAY ? 
