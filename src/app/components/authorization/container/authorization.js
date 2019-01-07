@@ -40,25 +40,29 @@ class Authorization extends Component {
         label: "Facility Provider", //t('authorization:table.facilityprovider'),
         name: "Facility Provider",
         key: "facilityprovider",
-        sort: true
+        sort: true,
+        className: 'text-left'
       },
       {
         label: "Received Date", //t('authorization:table.receiveddate'),
         name: "Received Date",
         key: "receiveddate",
-        sort: true
+        sort: true,
+        className: 'text-left'
       },
       {
         label: "Service Type", //t('authorization:table.servicetype'),
         name: "Service Type",
         key: "servicetype",
-        sort: true
+        sort: true,
+        className: 'text-left'
       },
       {
         label: "Your Cost", //t('authorization:table.status'),
         name: "Your Cost",
         key: "yourcost",
-        sort: true
+        sort: true,
+        className: 'text-right'
       },
       {
         label: "Status", //t('authorization:table.status'),

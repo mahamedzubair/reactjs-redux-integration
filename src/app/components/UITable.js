@@ -141,6 +141,7 @@ class UITable extends Component {
                               <td
                                 key={dataIndex}
                                 data-title={rowData[obj.key]}
+                                className={obj.className}
                                 >
                                 {obj.key === "yourcost" && rowData.savedCost
                                   ? <span className="desktop-view">$ </span>
