@@ -9,6 +9,7 @@ import * as Actions from '../actions';
 import { Link } from "react-router-dom";
 import Filters from "../../../routes/filter/containers/Filter";
 import NotificationBar from "../../UI/UINotification";
+import Account from '../../Account/container/Account'
 
 
 //@translate(["common","authorization"])
@@ -82,6 +83,7 @@ class Authorization extends Component {
             onClick={this.closeNotification}/>
           }
           <div className="row">
+            <Account></Account>
             <div className="columns medium-6 large-6">
               <Link className="button naked mobile-view" to={links.HEALTHINSURANCE}>
                 <span aria-hidden="true" className="icon-chevron-left" />Back
@@ -100,6 +102,7 @@ class Authorization extends Component {
                 </div>
             </div>
           </div>
+
           <UITable
             data={this.props.data.filteredData}
             headers={columns}
