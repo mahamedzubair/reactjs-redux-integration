@@ -3,14 +3,17 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import MediaQuery from "react-responsive";
 import { translate } from "react-i18next";
+import {fromJS, toArray, mapKeys} from 'immutable';
 import * as links from '../../../constants/routes';
-import {fromJS} from 'immutable';
-import 'foundation-sites';
 
-// import UIModal from "UI/UIModal";
-// import UIAccordion from "UI/UIAccordion";
-// import UIRadioSelection from "UI/UIRadioSelection";
-// import UICheckSelection from "UI/UICheckSelection";
+//import {numberWithoutDecimalFormat} from 'modules/Utility';
+
+//import UIModal from "UI/UIModal";
+import UIAccordion from '../../UI/UIAccordion';
+//import UIAccordion from "UI/UIAccordion";
+//import UIDropZone from "UI/UIDropZone";
+//import UIRadioSelection from "UI/UIRadioSelection";
+//import UICheckSelection from "UI/UICheckSelection";
 
 import * as AccountDetailActions from '../actions';
 
@@ -18,7 +21,7 @@ import * as AccountDetailActions from '../actions';
 class Account extends Component {
   constructor(props) {
     super(props);
-    //this.state = this.ingressDataTransform(props);
+    this.state = this.ingressDataTransform(props);
   }
 
   /// @@@@@@ TRANSFORMATION ........................
@@ -30,62 +33,228 @@ class Account extends Component {
     state["isMegaButton"] = true;
     state["passwordConfirmation"] = false;
 
-    //props.dispatch(AccountDetailActions.fetchAccountDetails());
-    
     return state;
   };
 
   componentDidMount() {
     this.props.dispatch(AccountDetailActions.fetchAccountDetails());
   }
-  
+
+  toggleDialogVisibility = (component) => {
+    this.setState((prevState) => {
+      return { 
+        modalVisibility: !prevState.modalVisibility,
+        modalComponent: component ? component : ''
+      }
+    })
+  };
+
+  renderAccordionContentRow = (list) => {
+    return (
+      <div className="">
+        <div>{list.label}</div>
+        <div>{list.value}</div>
+        {list.isEdit && <button className="image-icon-text" onClick={this.toggleDialogVisibility.bind(this, list.uiModalComponent)} aria-haspopup="dialog">
+          <span aria-hidden="true" className="icon icon-1x icon-pencil" />
+          <div>button.edit</div>
+        </button>}
+      </div>
+    )
+  }
+
   renderProfileDiv = () => {
     const { t } = this.props;
-   // console.log("account1",this.props.data.getIn(['memberView']), fromJS([]));
-   
+    console.log("account", this.props)
     let list = this.props.data.getIn(['memberView'], fromJS([]));
-    let percent = this.props.data.get('profileOptimization');
-    console.log("IDCardConstantsIDCardConstants", list.get('MemberFirstName'))
-    //this.props.data.getIn(['memberView'], fromJS({}));
+    let progress = this.props.data.get('profileOptimization');
     return (
       <div className="account">
-        <div className="profile-pic">
+        <div className="border-image">
           <img src="images/circular-image-treatment.jpg" />
         </div>
-        <div className="top-4x">
-          <h2 className="hl-medium">Member Name: {list.get('MemberFirstName')}</h2>
-          <div className="" />
-          <p className="">
-            <span>profilepercent 
-
-            <div class="progress" role="progressbar" tabindex="0" aria-valuenow={percent} aria-valuemin="0" 
-              aria-valuetext={`${percent} percent`} 
-              aria-valuemax="100">
-              <span class="progress-meter" style={`width: ${percent} %`}>
-                <p class="progress-meter-text">{percent}%</p>
-              </span>
-            </div>
-            </span>
-            profilepercent
-          </p>
-        </div>
-        <hr className="collapse"/>
-        <div className="">
-          <strong>profilepercent</strong>
-        </div>
-        <hr className="collapse"/>
-        <div className="">
-          <p className="">
-            <a href="#">profilepercent</a>
-          </p>
-          <p className="">
-            <a href="#">profilepercent</a>
-          </p>
+        <button className="image-icon">
+          <span aria-hidden="true" className="icon icon-1x icon-pencil"></span>
+        </button>
+        <div className="top-5x">
+          <h2 className="hl-medium">{list.get('MemberFirstName')} {list.get('MemberLastName')}</h2>
+          <div className="progress-bar" role="progressbar" tabIndex="0" aria-valuenow={progress} aria-valuemin="0"
+            aria-valuetext={`${progress} percent`}
+            aria-valuemax="100">
+            <div className="progress" style={{width:`${progress}%`}}></div>
+          </div>
+          <p><span className="font">{progress}</span> / 100</p>
+          <hr className="collapse" />
+          <p><strong>account:accountcomplete</strong></p>
+          <hr className="collapse" />
+          <p><a href="#" className="font">account:emergencycontact</a></p>
+          <p><a href="#" className="font">account:verifyemail</a></p>
         </div>
       </div>
     );
   };
 
+  appendAddressDetails = (list) => {
+    let address = '';
+    list.mapKeys((key, value) => address = `${address} ${value}`);
+    return address;
+  }
+
+  renderAddressTypes = () => {
+   let list = this.props.data;
+    let addressLabel = ['Home/Mailing Address', 'Alternate Address', 'Billing Address']
+    for(let i = 0; i < list.getIn(['memberView', 'address']).size; i++) {
+      let listData = {
+          label: addressLabel[i], 
+          value: this.appendAddressDetails(list.getIn(['memberView', 'address', i])),
+          isEdit: i === 0 ? true : false,
+          data: list.getIn(['memberView', 'address']),
+          uiModalComponent: this.renderEditAddress(list.getIn(['memberView', 'address']))
+        }; 
+        return this.renderAccordionContentRow(listData)
+      }
+  }
+
+  renderEmailAddress = () => {
+    let email = this.props.data.getIn(['memberView', 'Email']);
+    let emailList = {
+      label: 'Email', 
+      value: email,
+      isEdit: true,
+      data: email,
+      uiModalComponent: this.renderEditEmail(email)
+    }
+    return this.renderAccordionContentRow(emailList)
+  }
+
+  renderEditAddress = (address) => {
+    return (
+      <div>
+        renderEditAddress compoennt
+      </div>
+      )
+    
+  }
+
+  renderEditEmail = (email) => {
+    return (
+      <div>
+        renderEditEmail compoennt {email}
+      </div>
+      )
+    
+  }
+
+  renderAddressEmailAndPhone = (t) => {
+    let list = this.props.data;
+   let listData = {}
+    return <div className="row">
+        <div className="columns small-12 medium-4 large-4" />
+        <div className="columns small-12 medium-7 large-7" />
+        <div className="columns small-12 medium-1 large-1">
+        {list.getIn(['memberView', 'address']) && this.renderAddressTypes()}
+        {list.getIn(['memberView', 'Email']) && this.renderEmailAddress()}
+        </div>
+      </div>;
+  };
+
+  renderEthnicityLanguagePreference = (t) => {
+    return(
+      <div>
+      renderEthnicityLanguagePreference
+      </div>
+    );
+  };
+
+  renderAccessibilityMobilityTransportation = (t) => {
+    return(
+      <div>
+      renderAccessibilityMobilityTransportation
+      </div>
+    );
+  };
+
+  renderAccountManagement = (t) => {
+    return(
+      <div>
+      renderAccountManagement
+      </div>
+    );
+  };
+
+  renderPaymentMethods = (t) => {
+    return(
+      <div>
+      renderPaymentMethods
+      </div>
+    );
+  };
+
+  renderEmergencyContact = (t) => {
+    return(
+      <div>
+      renderEmergencyContact
+      </div>
+    );
+  };
+
+  renderLegalSettings = (t) => {
+    return(
+      <div>
+      renderLegalSettings
+      </div>
+    );
+  };
+
+  renderProfileDetail = () => {
+    const {t} = this.props;
+    const accordionContent = [
+      {
+        araiLabel: 'account:accordionHeaders.addressEmailAndPhone',
+        header: 'account:accordionHeaders.addressEmailAndPhone',
+        body: this.renderAddressEmailAndPhone(t)
+      },
+      {
+        araiLabel: 'account:accordionHeaders.ethnicityLanguagePreference',
+        header: 'account:accordionHeaders.ethnicityLanguagePreference',
+        body: this.renderEthnicityLanguagePreference(t)
+      },
+      {
+        araiLabel: 'account:accordionHeaders.accessibilityMobilityTransportation',
+        header: 'account:accordionHeaders.accessibilityMobilityTransportation',
+        body: this.renderAccessibilityMobilityTransportation(t)
+      },
+      {
+        araiLabel: 'account:accordionHeaders.accountManagement',
+        header: 'account:accordionHeaders.accountManagement',
+        body: this.renderAccountManagement(t)
+      },
+      {
+        araiLabel: 'account:accordionHeaders.paymentMethods',
+        header: 'account:accordionHeaders.paymentMethods',
+        body: this.renderPaymentMethods(t)
+      },
+      {
+        araiLabel: 'account:accordionHeaders.emergencyContact',
+        header: 'account:accordionHeaders.emergencyContact',
+        body: this.renderEmergencyContact(t)
+      },
+      {
+        araiLabel: 'account:accordionHeaders.legalSettings',
+        header: 'account:accordionHeaders.legalSettings',
+        body: this.renderLegalSettings(t)
+      }
+    ];
+    return(
+      <div>
+        <UIModal visible={this.state.modalVisibility} onExit={this.toggleDialogVisibility}>
+          {this.state.modalComponent}
+        </UIModal>
+        <UIAccordion>
+          {accordionContent}
+        </UIAccordion>
+      </div>
+    )
+  }
   // renderProfileDetail = () => {
   //   const { t } = this.props;
   //   let paymentSelection = [{ label: "Set as Default", value: "1" }];
@@ -489,22 +658,22 @@ class Account extends Component {
   //     </UIModal>
   //   );
   // };
+
   render() {
     const { t } = this.props;
-    console.log('render', this.props)
     return (
       <Fragment>
         <div className="row">
           <div className="columns small-12">
-            <h1>account</h1>
+            <h1>"account:account"</h1>
           </div>
           </div>
           <div className="rows top-4x">
-          <div className="small-12 medium-4 large-4">
+          <div className="columns small-12 medium-4 large-4">
             {this.renderProfileDiv()}
           </div>
-          <div className="small-12 medium-8 large-8">
-            {/* {this.renderProfileDetail()} */}
+          <div className="columns small-12 medium-8 large-8">
+            {this.renderProfileDetail()}
           </div>
         </div>
       </Fragment>
