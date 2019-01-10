@@ -36,6 +36,21 @@ class Authorization extends Component {
   render() {
     const {t} = this.props;
     const DEFAULTROWDISPLAY = 10;
+    const filterOptions = [
+        {
+          label: "Plan Year",
+          key: "planYear",
+        },
+        {
+          label: "Plan Type",
+          key: "planType",
+        },
+        {
+          label: "Providers",
+          key: "providers",
+        }
+
+    ]
     const columns = [
       {
         label: "Facility Provider", //t('authorization:table.facilityprovider'),
@@ -83,7 +98,6 @@ class Authorization extends Component {
             onClick={this.closeNotification}/>
           }
           <div className="row">
-            <Account></Account>
             <div className="columns medium-6 large-6">
               <Link className="button naked mobile-view" to={links.HEALTHINSURANCE}>
                 <span aria-hidden="true" className="icon-chevron-left" />Back
@@ -93,6 +107,7 @@ class Authorization extends Component {
                 filterAriaControl={this.filterAriaControl}
                 filterChange={this.filterData}
                 filterMaxCount={4}
+                filterOptions={filterOptions}
                 showMoreKey={['providers']}
                 />
                  <div className="desktop-view columns medium-6 large-6 text-right">

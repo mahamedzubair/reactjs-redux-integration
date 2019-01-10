@@ -85,17 +85,18 @@ class Filters extends Component {
       });
     }
     const { t } = this.props;
-      let filterData = [];
-    
-    for(let key in this.props.data.filterData[0]) {
-     filterData.push({
-        'label': `${key}`, 'header': `${key}`, 'id': `${key}`, 'key': `${key}`,
-        'data': this.props.data.filterData[0][key].map((item, index) => {
-          return { value: item, label: item, key: key }
+    let filterData = [];
+    if(this.props.data.filterData[0]) {
+      this.props.filterOptions.forEach((list) => {
+        filterData.push({
+          'label': `${list.label}`, 'header': `${list.label}`, 'id': `${list.key}`, 'key': `${list.key}`,
+          'data': this.props.data.filterData[0][list.key].map((item, index) => {
+            return { value: item, label: item, key: list.key }
+          })
         })
       })
     }
-
+    
     filterData.forEach((list, i) => {
       list['body'] = this.listContent(list, selectionFilter)
     });
