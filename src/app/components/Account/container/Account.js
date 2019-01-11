@@ -312,9 +312,9 @@ class Account extends Component {
     ];
     return(
       <div>
-        {/*<UIModal visible={this.state.modalVisibility} onExit={this.toggleDialogVisibility}>*/}
+        <UIModal visible={this.state.modalVisibility} onExit={this.toggleDialogVisibility}>
           {this.state.modalComponent}
-        {/*</UIModal>*/}
+        </UIModal>
         <UIAccordion>
           {accordionContent}
         </UIAccordion>
