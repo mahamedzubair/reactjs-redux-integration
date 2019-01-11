@@ -95,35 +95,81 @@ class Account extends Component {
 
   appendAddressDetails = (list) => {
     let address = '';
-    list.mapKeys((key, value) => address = `${address} ${value}`);
+    list.mapKeys((key, value) => {
+      value = value && key !== 'type' ? value : '';
+      address = `${address} ${value}`;
+    });
     return address;
   }
 
   renderAddressTypes = () => {
    let list = this.props.data;
-    let addressLabel = ['Home/Mailing Address', 'Alternate Address', 'Billing Address']
+    let addressLabel = ['Home/Mailing Address', 'Alternate Address', 'Billing Address'];
+    let listData = [];
     for(let i = 0; i < list.getIn(['memberView', 'address']).size; i++) {
-      let listData = {
+      listData.push({
           label: addressLabel[i], 
           value: this.appendAddressDetails(list.getIn(['memberView', 'address', i])),
           isEdit: i === 0 ? true : false,
           data: list.getIn(['memberView', 'address']),
           uiModalComponent: this.renderEditAddress(list.getIn(['memberView', 'address']))
-        }; 
-        return this.renderAccordionContentRow(listData)
-      }
+      }); 
+    }
+    return listData.map((listData) => this.renderAccordionContentRow(listData))
+  }
+
+  renderEmailValue = () => {
+    return (
+      <span> 
+        <span>{this.props.data.getIn(['memberView', 'Email'])}</span>
+        <span>
+        {
+            this.props.data.getIn(['memberView', 'isEmailVerified']) ? 'verified' : 
+              <a className="verification_link">unverified</a>
+          }
+        </span>
+      </span>
+    )
+    
   }
 
   renderEmailAddress = () => {
     let email = this.props.data.getIn(['memberView', 'Email']);
     let emailList = {
       label: 'Email', 
-      value: email,
+      value: this.renderEmailValue(),
       isEdit: true,
       data: email,
       uiModalComponent: this.renderEditEmail(email)
     }
     return this.renderAccordionContentRow(emailList)
+  }
+
+  renderMobileValue = () => {
+    return (
+      <span> 
+        <span>(M){this.props.data.getIn(['memberView', 'MobileNum'])}</span>
+        <span>
+        {
+            this.props.data.getIn(['memberView', 'isPhoneNumMobVerified']) ? 'verified' : 
+            <a className="verification_link">unverified</a>
+          }
+        </span>
+      </span>
+    )
+
+  }
+
+  renderMobileNumber = () => {
+    let mobile = this.props.data.getIn(['memberView', 'MobileNum']);
+    let mobileList = {
+      label: 'Phone', 
+      value: this.renderMobileValue(),
+      isEdit: true,
+      data: mobile,
+      uiModalComponent: this.renderEditPhoneNumber(mobile)
+    }
+    return this.renderAccordionContentRow(mobileList)
   }
 
   renderEditAddress = (address) => {
@@ -144,6 +190,14 @@ class Account extends Component {
     
   }
 
+  renderEditPhoneNumber = (phone) => {
+    return (
+      <div>
+        renderEditPhoneNumber compoennt {phone}
+      </div>
+      )
+  }
+
   renderAddressEmailAndPhone = (t) => {
     let list = this.props.data;
    let listData = {}
@@ -153,6 +207,7 @@ class Account extends Component {
         <div className="columns small-12 medium-1 large-1">
         {list.getIn(['memberView', 'address']) && this.renderAddressTypes()}
         {list.getIn(['memberView', 'Email']) && this.renderEmailAddress()}
+        {list.getIn(['memberView', 'MobileNum']) && this.renderMobileNumber()}
         </div>
       </div>;
   };
