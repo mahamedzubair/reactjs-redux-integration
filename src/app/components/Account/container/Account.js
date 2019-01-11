@@ -51,7 +51,7 @@ class Account extends Component {
 
   renderAccordionContentRow = (list) => {
     return (
-      <div className="">
+      <div key={list.key}>
         <div>{list.label}</div>
         <div>{list.value}</div>
         {list.isEdit && <button className="image-icon-text" onClick={this.toggleDialogVisibility.bind(this, list.uiModalComponent)} aria-haspopup="dialog">
@@ -112,7 +112,8 @@ class Account extends Component {
           value: this.appendAddressDetails(list.getIn(['memberView', 'address', i])),
           isEdit: i === 0 ? true : false,
           data: list.getIn(['memberView', 'address']),
-          uiModalComponent: this.renderEditAddress(list.getIn(['memberView', 'address']))
+          uiModalComponent: this.renderEditAddress(list.getIn(['memberView', 'address'])),
+          key: `renderAddressTypes-${i}`
       }); 
     }
     return listData.map((listData) => this.renderAccordionContentRow(listData))
@@ -140,18 +141,19 @@ class Account extends Component {
       value: this.renderEmailValue(),
       isEdit: true,
       data: email,
-      uiModalComponent: this.renderEditEmail(email)
+      uiModalComponent: this.renderEditEmail(email),
+      key: 'renderEmailAddress'
     }
     return this.renderAccordionContentRow(emailList)
   }
 
-  renderMobileValue = () => {
+  renderMobileValue = (list) => {
     return (
-      <span> 
-        <span>(M){this.props.data.getIn(['memberView', 'MobileNum'])}</span>
+      <span key={list.key + '-renderMobileValue'}> 
+        <span>({list.suffix}){this.props.data.getIn(['memberView', list.key])}</span>
         <span>
         {
-            this.props.data.getIn(['memberView', 'isPhoneNumMobVerified']) ? 'verified' : 
+            this.props.data.getIn(['memberView', list.verifcationKey]) ? 'verified' : 
             <a className="verification_link">unverified</a>
           }
         </span>
@@ -161,20 +163,29 @@ class Account extends Component {
   }
 
   renderMobileNumber = () => {
-    let mobile = this.props.data.getIn(['memberView', 'MobileNum']);
-    let mobileList = {
-      label: 'Phone', 
-      value: this.renderMobileValue(),
-      isEdit: true,
-      data: mobile,
-      uiModalComponent: this.renderEditPhoneNumber(mobile)
-    }
-    return this.renderAccordionContentRow(mobileList)
+    let contactDetails = [
+        {label: 'Phone', suffix: 'M', key: 'MobileNum', labelHide: false, verifcationKey: 'isPhoneNumMobVerified'}, 
+        {label: 'Home', suffix: 'H', key: 'PhoneNum',  labelHide: true, verifcationKey: 'isPhoneNumHomeVerified'},
+        {label: 'Buisness', suffix: 'B', key: 'BusinessPhNum',  labelHide: true, verifcationKey: 'isPhoneNumBusiVerified'}
+      ]
+    let mobileList = [];
+    contactDetails.forEach((list, index) => {
+      mobileList.push({
+        label: !list.labelHide ? list.label : '', 
+        value: this.renderMobileValue(list),
+        isEdit: index === 0 ? true : false,
+        data: this.props.data.getIn(['memberView', list.key]),
+        uiModalComponent: this.renderEditPhoneNumber(this.props.data.getIn(['memberView', list.key]), list),
+        key: `renderEmailAddress-${index}`
+      })
+
+    });
+    return mobileList.map((list) => this.renderAccordionContentRow(list))
   }
 
   renderEditAddress = (address) => {
     return (
-      <div>
+      <div key="address">
         renderEditAddress compoennt
       </div>
       )
@@ -183,17 +194,17 @@ class Account extends Component {
 
   renderEditEmail = (email) => {
     return (
-      <div>
+      <div key={email}>
         renderEditEmail compoennt {email}
       </div>
       )
     
   }
 
-  renderEditPhoneNumber = (phone) => {
+  renderEditPhoneNumber = (phoneList, phoneOption) => {
     return (
-      <div>
-        renderEditPhoneNumber compoennt {phone}
+      <div key={phoneOption.key + '-renderEditPhoneNumber'}>
+        renderEditPhoneNumber compoennt {phoneList}
       </div>
       )
   }
@@ -301,9 +312,9 @@ class Account extends Component {
     ];
     return(
       <div>
-        <UIModal visible={this.state.modalVisibility} onExit={this.toggleDialogVisibility}>
+        {/*<UIModal visible={this.state.modalVisibility} onExit={this.toggleDialogVisibility}>*/}
           {this.state.modalComponent}
-        </UIModal>
+        {/*</UIModal>*/}
         <UIAccordion>
           {accordionContent}
         </UIAccordion>
