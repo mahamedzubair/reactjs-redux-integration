@@ -5,10 +5,12 @@ import MediaQuery from "react-responsive";
 import { translate } from "react-i18next";
 import {fromJS, toArray, mapKeys} from 'immutable';
 import * as links from '../../../constants/routes';
+import AddressDetails from './Addressdetails/AddressDetails';
+import EmailDetails from './EmailDetails/EmailDetails';
 
 //import {numberWithoutDecimalFormat} from 'modules/Utility';
 
-//import UIModal from "UI/UIModal";
+import UIModal from "../../UI/UIModal";
 import UIAccordion from '../../UI/UIAccordion';
 //import UIAccordion from "UI/UIAccordion";
 //import UIDropZone from "UI/UIDropZone";
@@ -42,6 +44,7 @@ class Account extends Component {
 
   toggleDialogVisibility = (component) => {
     this.setState((prevState) => {
+    console.log('prevState', prevState)
       return { 
         modalVisibility: !prevState.modalVisibility,
         modalComponent: component ? component : ''
@@ -184,20 +187,12 @@ class Account extends Component {
   }
 
   renderEditAddress = (address) => {
-    return (
-      <div key="address">
-        renderEditAddress compoennt
-      </div>
-      )
+    return (<AddressDetails data={this.props.data} email={address} updateAccountDetails={this.updateAccountDetails}/>)
     
   }
 
   renderEditEmail = (email) => {
-    return (
-      <div key={email}>
-        renderEditEmail compoennt {email}
-      </div>
-      )
+    return (<EmailDetails data={this.props.data} updateAccountDetails={this.updateAccountDetails}/>)
     
   }
 
@@ -314,12 +309,17 @@ class Account extends Component {
       <div>
         <UIModal visible={this.state.modalVisibility} onExit={this.toggleDialogVisibility}>
           {this.state.modalComponent}
-        </UIModal>
+       </UIModal>
         <UIAccordion>
           {accordionContent}
         </UIAccordion>
       </div>
     )
+  }
+
+  updateAccountDetails = (details) => {
+      //TODO AXIOS post method can be added here
+      console.log('details', details);
   }
   // renderProfileDetail = () => {
   //   const { t } = this.props;
