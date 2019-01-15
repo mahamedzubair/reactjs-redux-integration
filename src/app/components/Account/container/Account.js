@@ -44,7 +44,6 @@ class Account extends Component {
 
   toggleDialogVisibility = (component) => {
     this.setState((prevState) => {
-    console.log('prevState', prevState)
       return { 
         modalVisibility: !prevState.modalVisibility,
         modalComponent: component ? component : ''
@@ -97,12 +96,26 @@ class Account extends Component {
   };
 
   appendAddressDetails = (list) => {
-    let address = '';
     list.mapKeys((key, value) => {
       value = value && key !== 'type' ? value : '';
       address = `${address} ${value}`;
     });
+    console.log('list.mapKeys(', list.mapKeys());
     return address;
+  }
+
+  getFullAddress = (address) => {
+    return(
+      <Fragment>
+        <span>{address.get('AddressLine1')}</span>
+        <span>{address.get('addressline2')}</span>
+        <span>
+          {address.get('City')}, 
+          {address.get('State')},  
+          {address.get('ZipCode')}
+        </span>
+      </Fragment>
+    );
   }
 
   renderAddressTypes = () => {
@@ -112,7 +125,7 @@ class Account extends Component {
     for(let i = 0; i < list.getIn(['memberView', 'address']).size; i++) {
       listData.push({
           label: addressLabel[i], 
-          value: this.appendAddressDetails(list.getIn(['memberView', 'address', i])),
+          value: this.getFullAddress(list.getIn(['memberView', 'address', i])),
           isEdit: i === 0 ? true : false,
           data: list.getIn(['memberView', 'address']),
           uiModalComponent: this.renderEditAddress(list.getIn(['memberView', 'address'])),
@@ -219,12 +232,90 @@ class Account extends Component {
   };
 
   renderEthnicityLanguagePreference = (t) => {
-    return(
-      <div>
-      renderEthnicityLanguagePreference
-      </div>
-    );
+    return (
+      <Fragment>
+        {this.renderEthnicityPreference(t)}
+        {this.renderLanguagePreference(t)}
+      </Fragment>
+    )
+  }
+
+  renderEthnicityPreference = (t) => {
+    let ethnicityList = ['Ethnicity', 'Race'];
+    let list = this.props.data.getIn(['memberView', 'preference', 0, 'ethinicityandLanguage']);
+    let ethnicityValue = '';
+    let contentList = {};
+    if(list) {
+      for(let i = 0; i < list.size; i++) {
+        if(ethnicityList.indexOf(list.getIn([i, 'type'])) > -1) {
+          list.get(i).mapKeys((key, value) => {
+            ethnicityValue = `${ethnicityValue}  ${list.getIn([i, 'Prefer not to provide']) === 'N' 
+              && value === 'Y' && key !== 'Prefer not to provide' > -1  ? 
+              `${key} ${ethnicityValue.includes('&') ? '' : '&'}` : ''}`
+            contentList = {
+              label: 'Ethnicity & Race', 
+              value: ethnicityValue,
+              isEdit: true,
+              data: list,
+              uiModalComponent: this.renderEditEthnicity(this.props.data.getIn(['memberView', list.key]), list),
+              key: `renderEthnicityLanguagePreference-${key}`
+            }
+          });
+        }
+      }
+      return this.renderAccordionContentRow(contentList)
+    }
+    
   };
+
+  renderLanguagePreference = (t) => {
+    let languageList = [{key: 'spokenLanguagePreference', label: 'Spoken Language' }, 
+       {key: 'writtenLanguagePreference', label: 'Written Language'}];
+    let langulatKey = ['spokenLanguagePreference', 'writtenLanguagePreference']
+    let list = this.props.data.getIn(['memberView', 'preference', 0, 'ethinicityandLanguage']);
+    let contentList = [];
+    if(list) {
+      languageList.map((ethnicity) => {
+        let listCheck = [];
+        let languageValue = '';
+        for(let i = 0; i < list.size; i++) {
+          if(langulatKey.indexOf(list.getIn([i, 'type'])) > -1) {
+              if(listCheck.indexOf(ethnicity.label) === -1) {
+                contentList.push({
+                  label: ethnicity.label, 
+                  value: list.getIn([i, 'selected']),
+                  isEdit: true,
+                  data: list,
+                  uiModalComponent: this.renderEditLanguage(this.props.data.getIn(['memberView', list.key]), list),
+                  key: `renderLanguagePreference-${ethnicity.key}`
+                })
+              }
+            listCheck = contentList.map((list) => list.label);
+          }
+        }
+      });
+      return contentList.map((content) => this.renderAccordionContentRow(content));
+    }
+    
+  };
+
+  renderEditEthnicity = (list) => {
+    //TODO component for renderEditEthnicity UI Modal
+    return (
+      <Fragment>
+      renderEditEthnicity
+      </Fragment>
+    )
+  }
+
+  renderEditLanguage = (list) => {
+    //TODO component for renderEditLanguage UI Modal
+    return (
+      <Fragment>
+      renderEditLanguage
+      </Fragment>
+    )
+  }
 
   renderAccessibilityMobilityTransportation = (t) => {
     return(

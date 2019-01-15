@@ -46,7 +46,7 @@
       "Email": "none.none@gmail.com",
       "isPhoneNumHomeVerified": true,
       "PhoneNum": 9049056072,
-      "isPhoneNumMobVerified": true,
+      "isPhoneNumMobVerified": false,
       "MobileNum": 9049056072,
       "isPhoneNumBusiVerified": true,
       "BusinessPhNum": 9049056072,
@@ -55,9 +55,9 @@
           "ethinicityandLanguage": [
             {
               "type": "Ethnicity",
-              "Hispanic or Latino": "N",
+              "Hispanic or Latino": "Y",
               "Not Hispanic or Latino": null,
-              "Prefer not to provide": "Y"
+              "Prefer not to provide": "N"
             },
             {
               "type": "Race",
@@ -68,19 +68,21 @@
               "Asain": "N",
               "American Indian or Alaska native": "N",
               "Other Race": "N",
-              "Prefer not to provide": "Y"
+              "Prefer not to provide": "N"
             },
             {
               "type": "spokenLanguagePreference",
               "Option 1 selected": "English",
               "Option 2": "Spanish",
-              "Option 3": "US-English"
+              "Option 3": "US-English",
+              "selected": "English"
             },
             {
               "type": "writtenLanguagePreference",
               "Option 1 selected": "English",
               "Option 2": "Spanish",
-              "Option 3": "US-English"
+              "Option 3": "US-English",
+              "selected": "English"
             },
             {
               "type": "howwelldoyouspeakEnglish",
