@@ -269,8 +269,8 @@ class Account extends Component {
   };
 
   renderLanguagePreference = (t) => {
-    let languageList = [{key: 'spokenLanguagePreference', label: 'Spoken Language' }, 
-       {key: 'writtenLanguagePreference', label: 'Written Language'}];
+    let languageList = [{key: 'spokenLanguagePreference', label: 'Spoken Language', isEdit: true }, 
+       {key: 'writtenLanguagePreference', label: 'Written Language', isEdit: false }];
     let langulatKey = ['spokenLanguagePreference', 'writtenLanguagePreference']
     let list = this.props.data.getIn(['memberView', 'preference', 0, 'ethinicityandLanguage']);
     let contentList = [];
@@ -284,7 +284,7 @@ class Account extends Component {
                 contentList.push({
                   label: ethnicity.label, 
                   value: list.getIn([i, 'selected']),
-                  isEdit: true,
+                  isEdit: ethnicity.isEdit,
                   data: list,
                   uiModalComponent: this.renderEditLanguage(this.props.data.getIn(['memberView', list.key]), list),
                   key: `renderLanguagePreference-${ethnicity.key}`
@@ -318,12 +318,37 @@ class Account extends Component {
   }
 
   renderAccessibilityMobilityTransportation = (t) => {
+    let list = this.props.data.getIn(['memberView', 'preference', 0, 'accessibilityMobilityDisabilityandTransportation']);
+    let accesibilityValues = ['Accessibility', 'Mobility', 'Disability', 'Transportation']
+    let contentList = [];
+    if(list) {
+      for(let i = 0; i < list.size; i++) {
+        list.get(i).mapKeys((key, value) => {
+          if(value === 'Y') {
+            contentList.push({
+              label: accesibilityValues[i], 
+              value: key,
+              isEdit: true,
+              data: list,
+              uiModalComponent: this.renderEditAccessibility(list),
+              key: `renderAccessibilityMobilityTransportation-${key}`
+            })
+          }
+        })
+      }
+      
+    }
+    return contentList.map((content) => this.renderAccordionContentRow(content));
+  };
+
+  renderEditAccessibility = () => {
+    //TODO component for renderEditAccessibility UI Modal
     return(
       <div>
-      renderAccessibilityMobilityTransportation
+
       </div>
-    );
-  };
+    )
+  }
 
   renderAccountManagement = (t) => {
     return(
