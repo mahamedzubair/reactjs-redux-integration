@@ -3,7 +3,7 @@ import React, { Component, Fragment } from "react";
 class AddressDetails extends Component {
     constructor(props) {
         super(props);
-        this.state = props;
+        this.state =  {... props};
     }
 
     render() {

@@ -7,6 +7,7 @@ import {fromJS, toArray, mapKeys} from 'immutable';
 import * as links from '../../../constants/routes';
 import AddressDetails from './Addressdetails/AddressDetails';
 import EmailDetails from './EmailDetails/EmailDetails';
+import AccountDetailsList from './AccountDetailsList/AccountDetailsList'
 
 //import {numberWithoutDecimalFormat} from 'modules/Utility';
 
@@ -42,27 +43,16 @@ class Account extends Component {
     this.props.dispatch(AccountDetailActions.fetchAccountDetails());
   }
 
-  toggleDialogVisibility = (component) => {
+  toggleDialogVisibility = (component, modalClass) => {
+    console.log('component', component);
     this.setState((prevState) => {
       return { 
         modalVisibility: !prevState.modalVisibility,
-        modalComponent: component ? component : ''
+        modalComponent: component ? component : '',
+        modalClass: modalClass ? modalClass : ''
       }
     })
   };
-
-  renderAccordionContentRow = (list) => {
-    return (
-      <div key={list.key}>
-        <div>{list.label}</div>
-        <div>{list.value}</div>
-        {list.isEdit && <button className="image-icon-text" onClick={this.toggleDialogVisibility.bind(this, list.uiModalComponent)} aria-haspopup="dialog">
-          <span aria-hidden="true" className="icon icon-1x icon-pencil" />
-          <div>button.edit</div>
-        </button>}
-      </div>
-    )
-  }
 
   renderProfileDiv = () => {
     const { t } = this.props;
@@ -129,10 +119,11 @@ class Account extends Component {
           isEdit: i === 0 ? true : false,
           data: list.getIn(['memberView', 'address']),
           uiModalComponent: this.renderEditAddress(list.getIn(['memberView', 'address'])),
+          uiModalClass: 'address-modal',
           key: `renderAddressTypes-${i}`
       }); 
     }
-    return listData.map((listData) => this.renderAccordionContentRow(listData))
+    return listData.map((listData, index) => <AccountDetailsList key={`renderAddressTypes-${index}`} showEditModal={(component, modalClass) => this.toggleDialogVisibility(component, modalClass)}  list={listData}/>)
   }
 
   renderEmailValue = () => {
@@ -158,9 +149,10 @@ class Account extends Component {
       isEdit: true,
       data: email,
       uiModalComponent: this.renderEditEmail(email),
+      uiModalClass: 'email-modal',
       key: 'renderEmailAddress'
     }
-    return this.renderAccordionContentRow(emailList)
+    return <AccountDetailsList showEditModal={(component, modalClass) => this.toggleDialogVisibility(component, modalClass)}  list={emailList}/>
   }
 
   renderMobileValue = (list) => {
@@ -196,7 +188,7 @@ class Account extends Component {
       })
 
     });
-    return mobileList.map((list) => this.renderAccordionContentRow(list))
+    return mobileList.map((list, index) => <AccountDetailsList key={`renderMobileNumber-${index}`} showEditModal={(component, modalClass) => this.toggleDialogVisibility(component, modalClass)}  list={list}/>)
   }
 
   renderEditAddress = (address) => {
@@ -258,12 +250,13 @@ class Account extends Component {
               isEdit: true,
               data: list,
               uiModalComponent: this.renderEditEthnicity(this.props.data.getIn(['memberView', list.key]), list),
+              uiModalClass: 'ethinicity-modal',
               key: `renderEthnicityLanguagePreference-${key}`
             }
           });
         }
       }
-      return this.renderAccordionContentRow(contentList)
+      return <AccountDetailsList showEditModal={(component, modalClass) => this.toggleDialogVisibility(component, modalClass)}  list={contentList}/>
     }
     
   };
@@ -271,7 +264,7 @@ class Account extends Component {
   renderLanguagePreference = (t) => {
     let languageList = [{key: 'spokenLanguagePreference', label: 'Spoken Language', isEdit: true }, 
        {key: 'writtenLanguagePreference', label: 'Written Language', isEdit: false }];
-    let langulatKey = ['spokenLanguagePreference', 'writtenLanguagePreference']
+    let languageKey = ['spokenLanguagePreference', 'writtenLanguagePreference']
     let list = this.props.data.getIn(['memberView', 'preference', 0, 'ethinicityandLanguage']);
     let contentList = [];
     if(list) {
@@ -279,7 +272,7 @@ class Account extends Component {
         let listCheck = [];
         let languageValue = '';
         for(let i = 0; i < list.size; i++) {
-          if(langulatKey.indexOf(list.getIn([i, 'type'])) > -1) {
+          if(languageKey.indexOf(list.getIn([i, 'type'])) > -1) {
               if(listCheck.indexOf(ethnicity.label) === -1) {
                 contentList.push({
                   label: ethnicity.label, 
@@ -287,6 +280,7 @@ class Account extends Component {
                   isEdit: ethnicity.isEdit,
                   data: list,
                   uiModalComponent: this.renderEditLanguage(this.props.data.getIn(['memberView', list.key]), list),
+                  uiModalClass: 'languge-modal',
                   key: `renderLanguagePreference-${ethnicity.key}`
                 })
               }
@@ -294,7 +288,7 @@ class Account extends Component {
           }
         }
       });
-      return contentList.map((content) => this.renderAccordionContentRow(content));
+      return contentList.map((content, index) => <AccountDetailsList key={`renderLanguagePreference-${index}`} showEditModal={(component, modalClass) => this.toggleDialogVisibility(component, modalClass)}  list={content}/>);
     }
     
   };
@@ -331,6 +325,7 @@ class Account extends Component {
               isEdit: true,
               data: list,
               uiModalComponent: this.renderEditAccessibility(list),
+              uiModalClass: 'accesability-modal',
               key: `renderAccessibilityMobilityTransportation-${key}`
             })
           }
@@ -338,7 +333,7 @@ class Account extends Component {
       }
       
     }
-    return contentList.map((content) => this.renderAccordionContentRow(content));
+    return contentList.map((content, index) => <AccountDetailsList key={`renderAccessibilityMobilityTransportation-${index}`} showEditModal={(component, modalClass) => this.toggleDialogVisibility(component, modalClass)}  list={content}/>);
   };
 
   renderEditAccessibility = () => {
@@ -423,7 +418,7 @@ class Account extends Component {
     ];
     return(
       <div>
-        <UIModal visible={this.state.modalVisibility} onExit={this.toggleDialogVisibility}>
+        <UIModal visible={this.state.modalVisibility} onExit={this.toggleDialogVisibility} dialogClass={this.state.modalClass}>
           {this.state.modalComponent}
        </UIModal>
         <UIAccordion>
