@@ -64,6 +64,7 @@ class Authorization extends Component {
         name: "Received Date",
         key: "receiveddate",
         sort: true,
+        type: 'date',
         className: 'text-left'
       },
       {
@@ -89,6 +90,7 @@ class Authorization extends Component {
     return (
       <div className="row">
         <div className="small-12 large-12 medium-12 columns">
+          <Account></Account>
           <h1 className="hl-large header">Authorization</h1>
           { this.props.data.filteredData.some((list) => list.savedCost) && 
             !this.props.data.hideNotify &&
