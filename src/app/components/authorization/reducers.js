@@ -54,6 +54,13 @@ const AuthReducer = (state = INITIAL_STATE, action) => {
       return Object.assign({}, state, {
         isLoaded: action.payload.isLoaded
       });
+
+      case 'SEARCH_AUTH_DATA':
+      return Object.assign({}, state, {
+        filteredData: action.payload.filteredData
+      });
+
+
     default:
       return state;
   }

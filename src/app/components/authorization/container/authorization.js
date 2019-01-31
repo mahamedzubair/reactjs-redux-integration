@@ -9,7 +9,8 @@ import * as Actions from '../actions';
 import { Link } from "react-router-dom";
 import Filters from "../../../routes/filter/containers/Filter";
 import NotificationBar from "../../UI/UINotification";
-import Account from '../../Account/container/Account'
+import Account from '../../Account/container/Account';
+import SearchBar from '../../SearchBar'
 
 
 //@translate(["common","authorization"])
@@ -31,6 +32,15 @@ class Authorization extends Component {
 
   toggleDataList = () => {
     this.props.dispatch(Actions.toggleList())
+  }
+
+  searchList = ($event) => {
+    let filteredData =  this.props.data.authData.filter(function(obj) {
+      return Object.keys(obj).some(function(keys) {
+        return obj[keys].toString().toLowerCase().includes($event.target.value.toLowerCase());
+      })
+    });
+    this.props.dispatch(Actions.searchAuthData(filteredData)) 
   }
 
   render() {
@@ -119,7 +129,7 @@ class Authorization extends Component {
                 </div>
             </div>
           </div>
-
+          <SearchBar SearchBar={this.searchList}/>
           <UITable
             data={this.props.data.filteredData}
             headers={columns}

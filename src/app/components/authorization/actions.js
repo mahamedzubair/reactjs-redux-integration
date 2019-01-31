@@ -35,6 +35,15 @@ export function closeNotification() {
   }
 }
 
+export function searchAuthData(filters) {
+  return {
+    type: "SEARCH_AUTH_DATA",
+    payload : {
+      filteredData : filters
+    }
+  }
+}
+
 export function toggleList() {
   return {
     type: "TOGGLE_LIST",
