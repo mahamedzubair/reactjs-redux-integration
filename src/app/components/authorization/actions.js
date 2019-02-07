@@ -13,7 +13,8 @@ export function fetchAuthorization(request) {
           console.log('res', res)
           dispatch({
             type: 'FETCH_AUTHORIZATION_SUCCESS',
-            authData: res.data.claimsList
+            authData: res.data.claimsList,
+            filters: request
           });
       })
       .catch(error => {

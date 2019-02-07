@@ -17,7 +17,7 @@ import SearchBar from '../../SearchBar'
 class Authorization extends Component {
 
   componentDidMount() {
-    this.props.dispatch(Actions.fetchAuthorization({}));
+    this.props.dispatch(Actions.fetchAuthorization({range:[0, 9]}));
   }
 
   /// @@@@@@@@ RENDERS ....................
@@ -31,7 +31,9 @@ class Authorization extends Component {
   }
 
   toggleDataList = () => {
-    this.props.dispatch(Actions.toggleList())
+    let request = this.props.data.filters;
+    request.range[1] = request.range[1] + 10;
+    this.props.dispatch(Actions.fetchAuthorization(request));
   }
 
   searchList = ($event) => {
@@ -143,9 +145,7 @@ class Authorization extends Component {
             isLoaded={this.props.data.isLoaded}
             />
 
-            {!this.props.data.isLoaded &&
-              this.props.data.filteredData.length > DEFAULTROWDISPLAY && 
-              (<div className="row top-1x text-center">
+            {(<div className="row top-1x text-center">
                   <div className="columns small-12 ">
                     <button
                       type="button"

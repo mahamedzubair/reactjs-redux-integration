@@ -1,7 +1,9 @@
 
 const INITIAL_STATE = {
   authData: [],
-  filters: [],
+  filters: {
+    range:[0, 9]
+  },
   columns: [],
   filteredData: [],
   isLoaded: false,
@@ -29,7 +31,8 @@ const AuthReducer = (state = INITIAL_STATE, action) => {
       return Object.assign({}, state, {
         isFetching: false,
         authData: data,
-        filteredData: [...data]
+        filteredData: [...data],
+        filters: action.filters
       });
     case 'FETCH_AUTHORIZATION_FAILURE':
       // Providing error message to state, to be able display it in UI.
