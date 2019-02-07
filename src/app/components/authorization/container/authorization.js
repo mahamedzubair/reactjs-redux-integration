@@ -32,6 +32,7 @@ class Authorization extends Component {
 
   toggleDataList = () => {
     let request = this.props.data.filters;
+    let addNumber = `${this.props.data.totalCount-request.range[1] >= 10 ? 10 : this.props.data.totalCount-request.range[1]}`;
     request.range[1] = request.range[1] + 10;
     this.props.dispatch(Actions.fetchAuthorization(request));
   }
@@ -144,8 +145,7 @@ class Authorization extends Component {
             showDetails={true}
             isLoaded={this.props.data.isLoaded}
             />
-
-            {(<div className="row top-1x text-center">
+            {this.props.data.totalCount >= this.props.data.filters.range[1] && (<div className="row top-1x text-center">
                   <div className="columns small-12 ">
                     <button
                       type="button"

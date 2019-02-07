@@ -32,7 +32,8 @@ const AuthReducer = (state = INITIAL_STATE, action) => {
         isFetching: false,
         authData: data,
         filteredData: [...data],
-        filters: action.filters
+        filters: action.filters,
+        totalCount: action.totalCount
       });
     case 'FETCH_AUTHORIZATION_FAILURE':
       // Providing error message to state, to be able display it in UI.

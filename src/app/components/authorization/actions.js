@@ -10,10 +10,10 @@ export function fetchAuthorization(request) {
       .get("http://localhost:3000/data.json")
       .then(res => {
           // When everything is ok, dispatching SUCCESS action.
-          console.log('res', res)
           dispatch({
             type: 'FETCH_AUTHORIZATION_SUCCESS',
             authData: res.data.claimsList,
+            totalCount: res.data.totalCount,
             filters: request
           });
       })
