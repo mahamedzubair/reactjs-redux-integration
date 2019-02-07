@@ -280,3 +280,76 @@ body {
     display: inline !important;
   }
 }
+
+.header-banner {
+    background-color: blue;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-top: -0.9375rem;
+  }
+  
+  .header-content {
+    color: white;
+    line-height: 1.875rem;
+    margin-bottom: 12.5rem;
+    h2 {
+      font-weight: inherit;
+    }
+  }
+  
+  .banner-button {
+      position: relative;
+      top: 21.15rem;
+      left: 0.5rem;
+    .circle-button {
+      background-color:white;
+    }
+    button,
+    .button {
+      color: gray;
+      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.5);
+    }
+  }
+  .sliding-container {
+    width: 50%;
+    float: left;
+    height: 300px;
+    overflow-x: hidden;
+    
+  }
+  .holder {
+    width: 300%;
+  }
+  .sliding-container .standard {
+      float: left;
+      width: 270px;
+      position: relative;
+      opacity: 1;
+      margin-right: 30px;
+      display: block;
+      transition        : all .3s ease;
+      -webkit-transition: all .3s ease;
+  }
+  .sliding-container .standard.inactive {
+    display: none;
+    opacity: 0;
+    animation: scale-display .3s;
+    animation-fill-mode:forwards;
+  }
+
+  @keyframes scale-display {
+    0% {
+      opacity: 1;
+      display: none;
+      transform: scale(1);
+      -webkit-transform: scale(1);
+    }
+
+    100% {
+      opacity: 0;
+      display: none;
+      transform: scale(0);
+      -webkit-transform: scale(0);
+    }
+  }
+  
