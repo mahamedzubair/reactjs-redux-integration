@@ -45,8 +45,13 @@ class Filters extends Component {
     if (!filters[key]) {
       filters[key] = [];
     }
-    if (filters[key].indexOf(value[value.length - 1]) === -1 && value.length ) {
-      filters[key].push(value[value.length - 1])
+    let uniquArray = Object.keys(filters).map(function(k){return filters[k]}).reduce(function(prev, curr) {
+      return prev.concat(curr);
+    });
+    
+    if (filters[key].indexOf(value[value.length - 1]) === -1 && value.length && 
+        uniquArray.indexOf(value[value.length - 1]) === -1  ) { 
+        filters[key].push(value[value.length - 1])
     }
     filters[key].forEach((list, index) => {
       if (value.indexOf(list) === -1) {
@@ -57,7 +62,7 @@ class Filters extends Component {
   };
 
   onFilterChange = () => {
-    let filters = { ... this.state.filters }
+    let filters = { ... this.state.filters, range: [0, 9] }
     if (filters) {
       this.props.filterChange(filters);
     }
