@@ -40,7 +40,7 @@ class Filters extends Component {
   }
 
   changeFilter = (name, value, key) => {
-    let filters = {... this.state.filters};
+    let filters = JSON.parse(JSON.stringify(this.state.filters));
     if (!filters[key]) {
       filters[key] = [];
     }
@@ -57,7 +57,7 @@ class Filters extends Component {
         filters[key].splice(index, 1)
       }
     });
-    this.setState({ lastFilters: {... this.state.filters}, filters: filters });
+    this.setState({ lastFilters: this.state.filters, filters: filters});
   };
 
   onFilterChange = () => {
