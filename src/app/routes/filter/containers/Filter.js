@@ -14,6 +14,7 @@ class Filters extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      lastFilters: {},
       filters: {},
       isFilters: false
     };
@@ -34,14 +35,12 @@ class Filters extends Component {
   }
 
   clearSelection = () => {
-    this.setState({ filters: this.filterListInit('clear') }, () => {
-      this.onFilterChange();
-    });
+    this.setState({ filters: this.filterListInit('clear') });
 
   }
 
   changeFilter = (name, value, key) => {
-    let filters = this.state.filters;
+    let filters = {... this.state.filters};
     if (!filters[key]) {
       filters[key] = [];
     }
@@ -58,19 +57,24 @@ class Filters extends Component {
         filters[key].splice(index, 1)
       }
     });
-    this.setState({ filters: filters });
+    this.setState({ lastFilters: {... this.state.filters}, filters: filters });
   };
 
   onFilterChange = () => {
     let filters = { ... this.state.filters, range: [0, 9] }
     if (filters) {
       this.props.filterChange(filters);
+      this.setState({ filters: {... this.state.filters}, lastFilters: {... this.state.filters}})
     }
   };
 
   toggleFilters = () => {
     this.setState({ isFilters: !this.state.isFilters });
   };
+
+  resetFilters = () => {
+    this.setState({ filters: {... this.state.lastFilters}})
+  }
 
   listContent = (data, selectionFilter) => {
     return (<FilterList dataList={data} selectionFilter={selectionFilter} 
@@ -118,8 +122,11 @@ class Filters extends Component {
               <div id="closebtn">
                 <span className="hl-medium" onClick={this.clearSelection}>Clear Section</span>
                 <span aria-hidden="true" aria-expanded={this.state.isFilters}
-                  onClick={this.toggleFilters}
-                  className="icon icon-remove"></span>
+                  onClick={() => {
+                    this.toggleFilters();
+                    this.resetFilters();
+                  }}
+                  className="icon icon-remove">close</span>
               </div>
               <div className="sidenav-content">
                 <UIAccordion className="accordion-sample"
