@@ -1,9 +1,12 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import UIDropDownButton from "./modules/UIDropDownButton";
-import simpleDDState from "./modules/sub-modules/DDState";
+import ddState from "./modules/sub-modules/DDState";
 import v4 from "uuid/v4";
+import throttle from "lodash.throttle";
+
 const UI_DROPDOWN_BUTTON_TYPE = "toggle";
+
 export default class UIAccordion extends Component {
   static defaultProps = {
     allowManyPanelsToBeOpen: false,
@@ -14,7 +17,9 @@ export default class UIAccordion extends Component {
     openFirstPanelOnDefault: false,
     openNextPanel: false,
     openAllNPanels: null,
+    expandAllOption: false
   };
+
   static propTypes = {
     /**
      * True allows multiple panels to be open.
@@ -26,28 +31,28 @@ export default class UIAccordion extends Component {
      * @type {[type]}
      */
     children: PropTypes.arrayOf(
-        PropTypes.shape({
-          /** aria-label for child accordion panel
-           * used only in the case where there is no header (text)
-           * or the header text is inadequate for screen reader users
-          */
-          ariaLabel: PropTypes.string,
-          /** Header for child accordion panel */
-          header: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.object,
-          ]),
-          /** Content for child accordion panel */
-          body: PropTypes.any,
-        })
-      ),
-      /** Additional classNames */
-      className: PropTypes.string,
-      /** Show or hide icons on accordion headers */
-      icon: PropTypes.bool,
-      /** Custom icon */
-      iconType: PropTypes.string,
-      /** Option to open a panel on default */
+      PropTypes.shape({
+        /** aria-label for child accordion panel
+         * used only in the case where there is no header (text)
+         * or the header text is inadequate for screen reader users
+        */
+        ariaLabel: PropTypes.string,
+        /** Header for child accordion panel */
+        header: PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.object,
+        ]),
+        /** Content for child accordion panel */
+        body: PropTypes.any,
+      })
+    ),
+    /** Additional classNames */
+    className: PropTypes.string,
+    /** Show or hide icons on accordion headers */
+    icon: PropTypes.bool,
+    /** Custom icon */
+    iconType: PropTypes.string,
+    /** Option to open a panel on default */
     openFirstPanelOnDefault: PropTypes.bool,
     /**
      * Headings will have a default aria-level of 2. If another heading level is
@@ -60,6 +65,7 @@ export default class UIAccordion extends Component {
     /** N number of panels to open on default, must be the total or it will open the first N panels */
     openAllNPanels: PropTypes.number,
   };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -67,6 +73,7 @@ export default class UIAccordion extends Component {
     };
     this.uuid = v4();
   }
+
   componentDidMount() {
     const { openFirstPanelOnDefault, openAllNPanels } = this.props;
     if (openAllNPanels) {
@@ -76,27 +83,29 @@ export default class UIAccordion extends Component {
       }
       this.setState({ expandedItems: expandedItems })
     }
+
     if (openFirstPanelOnDefault && !openAllNPanels) {
       this.setState({ expandedItems: {
         0: true
       }})
     }
   }
+
   componentDidUpdate(prevProps) {
     if (this.props.openNextPanel !== prevProps.openNextPanel && this.props.openNextPanel) {
       let newExpandedItem;
       Object.keys(this.state.expandedItems).forEach((item) => {
         if (this.state.expandedItems[item]) {
           newExpandedItem = Number(item) + 1;
-          this.setState({ expandedItems: { [newExpandedItem]: true }});
+          this.openNextPanel(newExpandedItem);
         }
       })
     }
-    if(this.props.openAllNPanels === 0 && 
+    if(this.props.openAllNPanels === 0 &&
         this.props.openAllNPanels !== prevProps.openAllNPanels )  {
         this.setState({ expandedItems: {}})
     }
-    if (this.props.openAllNPanels !== prevProps.openAllNPanels 
+    if (this.props.openAllNPanels !== prevProps.openAllNPanels
         && this.props.openAllNPanels) {
       let expandedItems = {};
       for (let i = 0; i < this.props.openAllNPanels; i++) {
@@ -105,25 +114,46 @@ export default class UIAccordion extends Component {
       this.setState({ expandedItems: expandedItems})
     }
   }
+
+  openNextPanel = throttle((panel) => this.setState({ expandedItems: { [panel]: true }}), 500, {
+    'leading': true,
+    'trailing': false
+  });
+
   dropdownClickHandler = id => {
     const { allowManyPanelsToBeOpen, openAllNPanels } = this.props;
     const currentExpandedItems = this.state.expandedItems;
     const emptyExpandedItems = {};
+
     if (currentExpandedItems[id] && !allowManyPanelsToBeOpen && !openAllNPanels) {
       return this.setState({ expandedItems: emptyExpandedItems });
     }
+
     if (allowManyPanelsToBeOpen || openAllNPanels) {
       const items = Object.assign(currentExpandedItems, {
         [id]: !currentExpandedItems[id]
       });
+
       return this.setState({
         expandedItems: Object.assign(currentExpandedItems, items)
       });
     }
+
     if (id >= 0) this.setState({ expandedItems: { [id]: true } });
   };
+
+  expandAllToggle = () => {
+    let expandedItems = {};
+    for (let i = 0; i < this.props.children.length; i++) {
+        expandedItems[i] = true;
+    }
+    this.setState({expandedItems: Object.keys(this.state.expandedItems).length !== this.props.children.length 
+      ? expandedItems : {}})
+  }
+
   renderAccordion = () => {
     const { children, className, icon, iconType } = this.props;
+
     return children.map((child, index) => {
       return (
         <div
@@ -141,10 +171,10 @@ export default class UIAccordion extends Component {
               role="heading"
               aria-level={this.props.headingLevel}
             >
-            <UIDropDownButton
+              <UIDropDownButton
                 type={UI_DROPDOWN_BUTTON_TYPE}
                 ddId={`dd-${index}-${this.uuid}`}
-                ddState={simpleDDState(
+                ddState={ddState(
                   `dd-${index}-${this.uuid}`,
                   this.state.expandedItems[index] || false,
                   `accordionTitle-${index}-${this.uuid}`
@@ -164,7 +194,7 @@ export default class UIAccordion extends Component {
                 : `accordion-body row hidden`
             }
           >
-          <div
+            <div
               className="columns small-12"
               role="region"
               aria-labelledby={`button-${index}-${this.uuid}`}
@@ -177,62 +207,19 @@ export default class UIAccordion extends Component {
       );
     });
   };
+
   render() {
-    return this.renderAccordion(this.props.children);
+    let expandedItemList = Object.values(this.state.expandedItems);
+    return (
+      <Fragment>
+        {this.props.expandAllOption && <div className="columns small-6 text-right">
+          <button className="linklike" 
+              onClick={this.expandAllToggle}>
+              <span>{expandedItemList.length && this.props.children.length === expandedItemList.length && expandedItemList.indexOf(true) > -1 ? "Collapse all": "Expand all"}</span>
+          </button>
+        </div>}
+        {this.renderAccordion(this.props.children)}
+      </Fragment>
+    );
   }
 }
-
-
-// Example:
-// //In this accordion we passed 4 so all the 4 accordions will be opened. We need to toogle something like
-// //openAllNPanels={2} or none.
-// const accordionContent = [
-//     {
-//       "ariaLabel": "testing",
-//       "header": "testing",
-//       "body": "Nunc arcu nunc, rhoncus vitae cursus non"
-//     },
-//     {
-//       "ariaLabel": "testing",
-//       "header": "testing",
-//       "body": "Nunc arcu nunc, rhoncus vitae cursus non, iaculis"
-//     },
-//     {
-//       "ariaLabel": "testing",
-//       "header": "testing",
-//       "body": <p><strong>Bold text:</strong> why not?</p>
-//     },
-//     {
-//       "ariaLabel": "Testing",
-//       "header": "Testing",
-//       "body": <div>markup also available</div>
-//     },
-//   ];
-// <UIAccordion className="accordion-sample" openAllNPanels={4} icon={false}>
-//     {accordionContent}
-// </UIAccordion>
-
-
-// Example 2:
-// //In this accordion all accordions will be closed
-// const accordionContent = [
-//     {
-//       "header": "example 1",
-//       "body": "Nunc arcu nunc, rhoncus vitae cursus non"
-//     },
-//     {
-//       "ariaLabel": "example 2",
-//       "body": "Nunc arcu nunc, rhoncus vitae cursus non, iaculis"
-//     },
-//     {
-//       "header": "example 3",
-//       "body": <p><strong>Bold text:</strong> why not?</p>
-//     },
-//     {
-//       "header": "example 4",
-//       "body": <div>markup also available</div>
-//     },
-//   ];
-// <UIAccordion className="accordion-sample">
-//     {accordionContent}
-// </UIAccordion>

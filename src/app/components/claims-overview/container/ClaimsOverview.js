@@ -158,8 +158,6 @@ class ClaimsOverview extends Component {
     // Render service details Accodion
 
     renderSeviceDetails = () => {
-        let serviceViewData = this.props.data.claimOverviewData.Response.Services;
-        let openAccoridon = this.state.toggleAccordion ? serviceViewData.length : 0;
         return (
             <div className="row">
                 <div className="small-12 columns">
@@ -168,17 +166,11 @@ class ClaimsOverview extends Component {
                         <div className="columns small-6">
                         <h1 className="hl-medium">Service Under this Claim</h1>
                         </div>
-                        <div className="columns small-6 text-right">
-                        <button className="linklike" 
-                            onClick={this.toggleAccordions}>
-                            <span>{this.state.toggleAccordion ? "Collapse all" : "Expand all"}</span>
-                        </button>
-                        </div>
                     </div>
                     <div className="row body">
                         <div className="columns small-12">
                         <UIAccordion className="accordion" 
-                            openAllNPanels={openAccoridon} 
+                            expandAllOption={true} 
                             allowManyPanelsToBeOpen>
                             {this.renderAccordion()}
                         </UIAccordion>
