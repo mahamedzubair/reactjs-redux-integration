@@ -128,21 +128,29 @@ class Filters extends Component {
                   }}
                   className="icon icon-remove">close</span>
               </div>
-              <div className="sidenav-content">
-                <UIAccordion className="accordion-sample"
-                  openNextPanel={true} allowManyPanelsToBeOpen={true} icon={false} openFirstPanelOnDefault={true}>
-                  {filterData}
-                </UIAccordion>
-              </div>
-              <button onClick={() => {
-                this.onFilterChange();
-                this.toggleFilters();
-              } }>
-                Apply Filters
-                </button>
-              <button onClick={() => this.props.saveFilters()}>
-                Save Filters
-                </button>
+            { !this.props.data.isError ?
+              (<Fragment> 
+                {filterData.length > 0 ? 
+                  (<Fragment>
+                    <div className="sidenav-content">
+                      <UIAccordion className="accordion-sample"
+                        openNextPanel={true} allowManyPanelsToBeOpen={true} icon={false} openFirstPanelOnDefault={true}>
+                        {filterData}
+                      </UIAccordion>
+                    </div>
+                    <button onClick={() => {
+                      this.onFilterChange();
+                      this.toggleFilters();
+                    } }>
+                      Apply Filters
+                      </button>
+                      <button onClick={() => this.props.saveFilters()}>
+                        Save Filters
+                      </button>
+                    </Fragment>) : <label>No Filters Found</label>
+                  }
+                </Fragment>) : (<label className='text-danger'>* Error Fetching Data</label>)
+            }
             </div>
 
           }

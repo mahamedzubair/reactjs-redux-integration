@@ -1,28 +1,31 @@
 import axios from 'axios';
+
+export const FETCH_FILTER_REQUEST = 'FETCH_FILTER_REQUEST';
+export const FETCH_FILTER_SUCCESS = 'FETCH_FILTER_SUCCESS';
+export const FETCH_FILTER_FAILURE = 'FETCH_FILTER_FAILURE';
+
 export function fetchFilters() {
-  // Instead of plain objects, we are returning function.
   return function(dispatch) {
-    // Dispatching REQUEST action, which tells our app, that we are started requesting autorization.
     dispatch({
-      type: 'FETCH_FILTER_REQUEST'
+      type: FETCH_FILTER_REQUEST
     });
+
+    const url =`http://localhost:3000/data/filterData.json`
     return axios
-      .get("http://localhost:3000/data/filterData.json")
+      .get(url)
       .then(res => {
-          // When everything is ok, dispatching SUCCESS action.
           console.log('res filter', res)
           dispatch({
-            type: 'FETCH_FILTER_SUCCESS',
+            type: FETCH_FILTER_SUCCESS,
             filterData: res.data.data.filterData
           });
       })
       .catch(error => {
           dispatch({
-            type: 'FETCH_FILTER_FAILURE',
-            authError: body.error
+            type: FETCH_FILTER_FAILURE,
+            filterError: error
           });
         console.log("fetchRequestFailed", error);
       });
   }
 }
-
