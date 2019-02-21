@@ -49,6 +49,11 @@ class Authorization extends Component {
     this.props.dispatch(Actions.fetchAuthorization(request));
   }
 
+  sortDataList = (sortType, sortOrder) => {
+    let request = Object.assign({}, this.props.data.filters, {sortType, sortOrder});
+    this.props.dispatch(Actions.fetchAuthorization(request));
+  }
+
   searchList = (value) => {
     let filteredData =  this.props.data.authData.filter(function(obj) {
       return Object.keys(obj).some(function(keys) {
@@ -164,6 +169,7 @@ class Authorization extends Component {
               providerRowDisplay='facilityprovider'
               uniqueKey="id"
               showDetails={true}
+              sortList={this.sortDataList}
               isLoaded={this.props.data.isLoaded}
               />
               {this.props.data.totalCount >= this.props.data.filters.range[1] && (<div className="row top-1x text-center">
