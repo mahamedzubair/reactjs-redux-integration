@@ -1,11 +1,13 @@
 import axios from 'axios';
-export function fetchClaimOverview() {
+export function fetchClaimOverview(params) {
   // Instead of plain objects, we are returning function.
   return function(dispatch) {
     // Dispatching REQUEST action, which tells our app, that we are started requesting autorization.
     dispatch({
       type: 'FETCH_CLAIM_OVERVIEW_REQUEST'
     });
+    const url = `/mlp/api/v1/mlpsvc/claims/details/${params}`;
+    console.log('url', url);
     return axios
       .get("http://localhost:3000/data/clasimDetails.json")
       .then(res => {

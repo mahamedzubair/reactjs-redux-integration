@@ -13,6 +13,7 @@ export function fetchAuthorization(request) {
           dispatch({
             type: 'FETCH_AUTHORIZATION_SUCCESS',
             authData: res.data.claimsList,
+            authList: res.data,
             totalCount: res.data.totalCount,
             filters: request
           });

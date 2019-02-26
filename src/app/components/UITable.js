@@ -149,9 +149,9 @@ class UITable extends Component {
                             ))}
                             {this.props.showDetails &&
                               <td className="text-center">
-                                <Link to={this.props.pageLink} className="">
+                                <a className="cursor-pointer" onClick={() => this.props.navigateToDetails(rowData)}>
                                 Show Details
-                                </Link>
+                                </a>
                               </td>
                             }
                           </tr>

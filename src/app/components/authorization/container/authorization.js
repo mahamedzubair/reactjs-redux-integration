@@ -63,6 +63,12 @@ class Authorization extends Component {
     this.props.dispatch(Actions.searchAuthData(filteredData)) 
   }
 
+  claimDetails = (list) => {
+    console.log('list', this.props.data);
+    let {partyId, transactionId, sourceSystem, tenantID} = this.props.data.authList;
+    this.props.history.push(`/claimsoverview?partyId=${partyId}&transactionId=${transactionId}&sourceSystem=${sourceSystem}&tenantID=${tenantID}&claimId=${list.claimId}`);
+  }
+
   render() {
     const {t} = this.props;
     const DEFAULTROWDISPLAY = 10;
@@ -171,6 +177,7 @@ class Authorization extends Component {
               showDetails={true}
               sortList={this.sortDataList}
               isLoaded={this.props.data.isLoaded}
+              navigateToDetails={this.claimDetails}
               />
               {this.props.data.totalCount >= this.props.data.filters.range[1] && (<div className="row top-1x text-center">
                     <div className="columns small-12 ">

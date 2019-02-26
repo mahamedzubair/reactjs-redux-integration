@@ -31,6 +31,7 @@ const AuthReducer = (state = INITIAL_STATE, action) => {
       return Object.assign({}, state, {
         isFetching: false,
         authData: data,
+        authList: action.authList,
         filteredData: [...data],
         filters: action.filters,
         totalCount: action.totalCount

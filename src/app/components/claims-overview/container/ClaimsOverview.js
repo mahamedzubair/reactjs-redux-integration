@@ -16,14 +16,17 @@ class ClaimsOverview extends Component {
     }
 
     componentDidMount() {
-        this.props.dispatch(Actions.fetchClaimOverview());
+        let {partyId, transactionId, sourceSystem, tenantID, claimId} = this.props.location.search.replace(/(^\?)/,'').split("&").map(function(n){return n = n.split("="),this[n[0]] = n[1],this}.bind({}))[0];
+        let params = `${partyId}/${claimId}?transactionId=${transactionId}&sourceSystem=${sourceSystem}`
+        this.props.dispatch(Actions.fetchClaimOverview(params));
     }
     toggleAccordions = () => {
         this.setState({toggleAccordion: !this.state.toggleAccordion})
     }
 
     renderOverviewDetails = () => {
-        let claimsData = this.props.data.claimOverviewData.Response.claimDetails
+        let claimsData = this.props.data.claimOverviewData.Response.claimDetails;
+        
         return(
             <div className="small-12 medium-5 large-5 columns">
                 <div className="panel standard">
