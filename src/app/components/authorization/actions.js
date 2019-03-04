@@ -37,11 +37,12 @@ export function closeNotification() {
   }
 }
 
-export function searchAuthData(filters) {
+export function searchAuthData(filters, value) {
   return {
     type: "SEARCH_AUTH_DATA",
     payload : {
-      filteredData : filters
+      filteredData : filters,
+      filterValue: value
     }
   }
 }

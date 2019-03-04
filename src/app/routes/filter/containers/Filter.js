@@ -24,8 +24,12 @@ class Filters extends Component {
     this.props.dispatch(Actions.fetchFilters());
   }
 
+  deepCopy = (obj) => {
+    return  JSON.parse(JSON.stringify(obj))
+  }
+
   filterListInit = (type = 'init') => {
-    let filters = { ... this.state.filters };
+    let filters = this.deepCopy(this.state.lastFilters);
     for(let key in this.props.data.filterData[0]) {
       if (!filters[key] || type === 'clear') {
         filters[key] = [];
@@ -36,11 +40,10 @@ class Filters extends Component {
 
   clearSelection = () => {
     this.setState({ filters: this.filterListInit('clear') });
-
   }
 
   changeFilter = (name, value, key) => {
-    let filters = JSON.parse(JSON.stringify(this.state.filters));
+    let filters = { ... this.deepCopy(this.state.lastFilters), ... this.deepCopy(this.state.filters) }
     if (!filters[key]) {
       filters[key] = [];
     }
@@ -57,14 +60,15 @@ class Filters extends Component {
         filters[key].splice(index, 1)
       }
     });
-    this.setState({ lastFilters: this.state.filters, filters: filters});
+    console.log('filters', filters);
+    this.setState({ lastFilters: this.deepCopy(filters)});
   };
 
   onFilterChange = () => {
-    let filters = { ... this.state.filters, range: [0, 9] }
+    let filters = {... this.deepCopy(this.state.lastFilters),range: [0, 9] }
     if (filters) {
       this.props.filterChange(filters);
-      this.setState({ filters: {... this.state.filters}, lastFilters: {... this.state.filters}})
+      this.setState({ filters: this.deepCopy(filters)})
     }
   };
 
@@ -73,7 +77,8 @@ class Filters extends Component {
   };
 
   resetFilters = () => {
-    this.setState({ filters: {... this.state.lastFilters}})
+    console.log('this.state.filters resetFiltersresetFiltersresetFilters', this.state.filters)
+    this.setState({ filters: {... this.state.filters}, lastFilters: {... this.state.filters}})
   }
 
   listContent = (data, selectionFilter) => {

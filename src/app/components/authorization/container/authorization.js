@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import Filters from "../../../routes/filter/containers/Filter";
 import NotificationBar from "../../UI/UINotification";
 import Account from '../../Account/container/Account';
-import SearchBar from '../../SearchBar';
+import UISearchBar from '../../UISearchBar';
 import Navigation from "../../navigation/container/Navigation";
 import v4 from "uuid/v4";
 
@@ -34,7 +34,6 @@ class Authorization extends Component {
   /// @@@@@@@@ RENDERS ....................
 
   filterData = ( request ) => {
-    this.searchBarRef.inputRef.value = "";
     this.props.dispatch(Actions.fetchAuthorization(request));
   } 
 
@@ -60,7 +59,7 @@ class Authorization extends Component {
         return obj[keys].toString().toLowerCase().includes(value);
       })
     });
-    this.props.dispatch(Actions.searchAuthData(filteredData)) 
+    this.props.dispatch(Actions.searchAuthData(filteredData, value)) 
   }
 
   claimDetails = (list) => {
@@ -157,11 +156,12 @@ class Authorization extends Component {
                   </div>
               </div>
             </div>
-             <SearchBar
+             <UISearchBar
               placeholder="Search My Content"
               ariaLabel="search claims"
               ariaControls={`${this.uuid} ${this.uuid2}`}
               onValidatedChange={this.searchList}
+              value={this.props.data.filterValue}
               ref={(searchBarRef) => { this.searchBarRef = searchBarRef }}
             />
 

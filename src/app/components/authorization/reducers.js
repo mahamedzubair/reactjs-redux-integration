@@ -7,7 +7,8 @@ const INITIAL_STATE = {
   columns: [],
   filteredData: [],
   isLoaded: false,
-  hideNotify: false
+  hideNotify: false,
+  filterValue: ''
 };
 
 const AuthReducer = (state = INITIAL_STATE, action) => {
@@ -34,7 +35,8 @@ const AuthReducer = (state = INITIAL_STATE, action) => {
         authList: action.authList,
         filteredData: [...data],
         filters: action.filters,
-        totalCount: action.totalCount
+        totalCount: action.totalCount,
+        filterValue: ''
       });
     case 'FETCH_AUTHORIZATION_FAILURE':
       // Providing error message to state, to be able display it in UI.
@@ -62,7 +64,8 @@ const AuthReducer = (state = INITIAL_STATE, action) => {
 
       case 'SEARCH_AUTH_DATA':
       return Object.assign({}, state, {
-        filteredData: action.payload.filteredData
+        filteredData: action.payload.filteredData,
+        filterValue: action.payload.filterValue
       });
 
 
