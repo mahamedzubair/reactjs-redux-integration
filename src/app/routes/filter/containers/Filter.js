@@ -39,11 +39,11 @@ class Filters extends Component {
   }
 
   clearSelection = () => {
-    this.setState({ filters: this.filterListInit('clear') });
+    this.setState({ lastFilters: {}, filters: {} });
   }
 
   changeFilter = (name, value, key) => {
-    let filters = { ... this.deepCopy(this.state.lastFilters), ... this.deepCopy(this.state.filters) }
+    let filters = this.deepCopy(this.state.lastFilters);
     if (!filters[key]) {
       filters[key] = [];
     }
@@ -60,15 +60,14 @@ class Filters extends Component {
         filters[key].splice(index, 1)
       }
     });
-    console.log('filters', filters);
-    this.setState({ lastFilters: this.deepCopy(filters)});
+    this.setState({ lastFilters: filters});
   };
 
   onFilterChange = () => {
-    let filters = {... this.deepCopy(this.state.lastFilters),range: [0, 9] }
+    let filters = {... this.state.lastFilters, range: [0, 9] }
     if (filters) {
       this.props.filterChange(filters);
-      this.setState({ filters: this.deepCopy(filters)})
+      this.setState({ filters: filters})
     }
   };
 
@@ -77,8 +76,7 @@ class Filters extends Component {
   };
 
   resetFilters = () => {
-    console.log('this.state.filters resetFiltersresetFiltersresetFilters', this.state.filters)
-    this.setState({ filters: {... this.state.filters}, lastFilters: {... this.state.filters}})
+    this.setState({ filters: this.state.filters, lastFilters: this.state.filters})
   }
 
   listContent = (data, selectionFilter) => {
