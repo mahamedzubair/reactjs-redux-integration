@@ -48,3 +48,4 @@ const AccountDetailReducer = (state = fromJS(defaultState), action) => {
 };
 
 export default AccountDetailReducer;
+
